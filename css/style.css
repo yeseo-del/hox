@@ -1,0 +1,211 @@
+@font-face {
+    font-family:"SourceCodePro-Semibold";
+    src: url("../font/SourceCodePro-Semibold.otf")
+}
+
+body {
+    background-color: #000000;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.slot {
+    width: 100px;
+    height: 115px;
+    float: left;
+    margin-bottom: -33px;
+}
+
+.clicker-slot svg {
+    fill: #7fea7f;
+}
+
+.clicker-slot polygon:hover {
+    stroke: #7fea7f;
+    cursor: pointer;
+}
+
+.clicker-slot polygon:active {
+    stroke: #000000;
+}
+
+.slot .clicker-label {
+    position: relative;
+    top: -105px;
+    left: 28px;
+    z-index: 2;
+    pointer-events:none;
+    font-size: 80px;
+    font-weight: bold;
+}
+
+.slot .label {
+    width: 100px;
+    position: relative;
+    top: -77px;
+    z-index: 2;
+    pointer-events:none;
+    font-size: 25px;
+    font-weight: bold;
+    font-family:"SourceCodePro-Semibold";
+    text-align: center;
+}
+
+.empty polygon {
+    fill: #5b5b5b;
+}
+
+.slot.active polygon {
+    fill: #7f7f7f
+}
+
+.active polygon:hover {
+    stroke: #7fea7f;
+    cursor: pointer;
+}
+
+.active polygon:active {
+    stroke: #000000;
+}
+
+svg {
+    width: 100px;
+    height: 115px;
+    fill: #373737;
+    stroke:#000000;
+    stroke-width:4px;
+}
+
+
+
+
+.credit-box {
+    width: 270px;
+    height: 65px;
+    float: left;
+    margin-left: 10px;
+    padding-left: 10px;
+    background-color: #373737;
+    margin-bottom: 5px;
+    color: #FFFFFF;
+    font-size: 30px;
+    line-height: 65px;
+    font-family: "SourceCodePro-Semibold";
+}
+
+.dps-box {
+    width: 270px;
+    height: 65px;
+    float: left;
+    margin-left: 10px;
+    padding-left: 10px;
+    background-color: #373737;
+    margin-bottom: 5px;
+    color: #FFFFFF;
+    font-size: 30px;
+    line-height: 65px;
+    font-family: "SourceCodePro-Semibold";
+}
+
+.credit-amount {
+    float: right;
+    margin-right: 5px;
+}
+
+.dps-amount {
+    float: right;
+    margin-right: 5px;
+}
+
+.purchase-button {
+    width: 280px;
+    height: 65px;
+    float: left;
+    margin-left: 10px;
+    background-color: #373737;
+    margin-bottom: 5px;
+    color: #FFFFFF
+}
+
+.level-box {
+    width: 280px;
+    height: 65px;
+    float: left;
+    margin-left: 10px;
+    background-color: #373737;
+    margin-bottom: 5px;
+    color: #FFFFFF;
+}
+
+
+
+.hex-list {
+    width: 300px;
+    height: 700px;
+    float: left;
+}
+
+.progress-list {
+    width: 300px;
+    height: 700px;
+    float: left;
+}
+
+.container {
+    width: 1312px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.grid-container {
+    border: 1px solid black;
+    width: 700px;
+    height: 700px;
+    padding: 5px;
+    float: left;
+}
+
+.hex-row {
+    padding-top: 5px;
+}
+
+
+.purchase-button .color-box {
+    width: 65px;
+    height: 65px;
+    float: left;
+    text-align: center;
+    line-height: 65px;
+    font-family: "SourceCodePro-Semibold";
+    font-size: 30px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.purchase-button .color-box:hover {
+    opacity: 1;
+}
+
+.purchase-button .lvlup {
+    float: right;
+    width: 60px;
+    height: 65px;
+    text-align: center;
+    line-height: 65px;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: -45px;
+}
+
+.purchase-button .stat {
+    margin-left: 14px;
+    margin-right: 6px;
+    width: 120px;
+    font-size: 19px;
+    float: left;
+}
