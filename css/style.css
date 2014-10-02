@@ -127,7 +127,8 @@ svg {
     margin-left: 10px;
     background-color: #373737;
     margin-bottom: 5px;
-    color: #FFFFFF
+    color: #FFFFFF;
+    cursor: pointer;
 }
 
 .level-box {
@@ -138,8 +139,41 @@ svg {
     background-color: #373737;
     margin-bottom: 5px;
     color: #FFFFFF;
+    position: relative;
 }
 
+.level-box .progress {
+    height: 65px;
+    background-color: #7fea7f;
+}
+
+.level-box .progress.animation {
+    -webkit-transition: width 0.1s linear; /* For Safari 3.1 to 6.0 */
+    transition: width 0.1s linear;
+}
+
+.level-box .progress-label {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: 23px;
+    font-family: "SourceCodePro-Semibold";
+    line-height: 65px;
+    margin-left: 10px;
+}
+
+.level-box.aura-title {
+    margin-top: 65px;
+    font-size: 30px;
+    line-height: 65px;
+    font-family: "SourceCodePro-Semibold";
+}
+
+.purchase-button.inactive {
+    opacity: 0.5;
+}
 
 
 .hex-list {
@@ -182,7 +216,6 @@ div.grid-container {
     font-family: "SourceCodePro-Semibold";
     font-size: 30px;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    cursor: pointer;
     opacity: 0.9;
 }
 

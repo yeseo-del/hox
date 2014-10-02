@@ -2,6 +2,10 @@ angular.module('HexaClicker', [])
     .controller('GameCtrl', ['$scope', '$interval', function($scope, $interval) {
         $scope.credit = 0;
 
+        $scope.prettify = function(number) {
+            return prettify(number);
+        }
+
         $scope.currentLevel = 1;
         $scope.currentHp = 0;
 
@@ -10,15 +14,15 @@ angular.module('HexaClicker', [])
         var EMPTY_SLOT = { id: 0, color: "#373737", baseDps: 0, increase: 1.0, price: 0 };
 
         $scope.hexalist = [
-            { id: 0, color: "#ea8a00", baseDps: 3, increase: 1.1, price: 100, upgrade: 100 },
-            { id: 1, color: "#bae272", baseDps: 10, increase: 1.1, price: 200, upgrade: 100 },
-            { id: 2, color: "#541a30", baseDps: 20, increase: 1.1, price: 300, upgrade: 100 },
-            { id: 3, color: "#d9afd7", baseDps: 30, increase: 1.1, price: 400, upgrade: 100 },
-            { id: 4, color: "#f1d888", baseDps: 40, increase: 1.1, price: 500, upgrade: 100 },
-            { id: 5, color: "#586fa1", baseDps: 50, increase: 1.1, price: 600, upgrade: 100 },
-            { id: 6, color: "#efeae2", baseDps: 60, increase: 1.1, price: 700, upgrade: 100 },
-            { id: 7, color: "#00b0ff", baseDps: 70, increase: 1.1, price: 800, upgrade: 100 },
-            { id: 8, color: "#84b096", baseDps: 80, increase: 1.1, price: 900, upgrade: 100 }
+            { id: 0, color: "#ea8a00", baseDps: 10, increase: 1.1, price: 100, upgrade: 200, achieved: true},
+            { id: 1, color: "#bae272", baseDps: 20, increase: 1.1, price: 500, upgrade: 1000, achieved: false },
+            { id: 2, color: "#541a30", baseDps: 40, increase: 1.1, price: 1000, upgrade: 2000, achieved: false },
+            { id: 3, color: "#d9afd7", baseDps: 60, increase: 1.1, price: 2000, upgrade: 4000, achieved: false },
+            { id: 4, color: "#f1d888", baseDps: 80, increase: 1.1, price: 4000, upgrade: 8000, achieved: false },
+            { id: 5, color: "#586fa1", baseDps: 100, increase: 1.1, price: 8000, upgrade: 16000, achieved: false },
+            { id: 6, color: "#efeae2", baseDps: 200, increase: 1.1, price: 16000, upgrade: 32000, achieved: false },
+            { id: 7, color: "#00b0ff", baseDps: 400, increase: 1.1, price: 32000, upgrade: 64000, achieved: false },
+            { id: 8, color: "#84b096", baseDps: 600, increase: 1.1, price: 64000, upgrade: 128000, achieved: false }
         ]
 
 
@@ -32,6 +36,7 @@ angular.module('HexaClicker', [])
 
         $scope.addCredit = function(amount) {
             $scope.credit += amount;
+            $scope.checkAchieved();
         }
 
         $scope.slots = [
@@ -141,9 +146,17 @@ angular.module('HexaClicker', [])
         }
 
         $interval(function(){
-            $scope.currentHp += $scope.getDPS();
+            $scope.currentHp += $scope.getDPS() / 10;
             checkHp();
-        }, 1000);
+        }, 100);
+
+        $scope.checkAchieved = function() {
+            for(var i = 0; i < $scope.hexalist.length - 1; i++) {
+                if($scope.credit >= $scope.hexalist[i].price) {
+                    $scope.hexalist[i+1].achieved = true;
+                }
+            }
+        }
 
         var checkHp = function() {
             var level = $scope.getCurrentLevel();
@@ -151,6 +164,8 @@ angular.module('HexaClicker', [])
                 $scope.credit += level.credit;
                 $scope.currentLevel += 1;
                 $scope.currentHp = 0;
+
+                $scope.checkAchieved();
             }
         }
 
@@ -204,7 +219,8 @@ angular.module('HexaClicker', [])
             templateUrl: 'purchase.html',
             scope: {
                 hexaData: '=',
-                hexaLevels: '='
+                hexaLevels: '=',
+                credit: '='
 
             },
             link: function($scope, element) {
