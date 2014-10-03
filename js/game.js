@@ -239,5 +239,10 @@ angular.module('HexaClicker', [])
             }
         };
     })
+    .filter('prettify', function(){
+        return function(input) {
+            return prettify(input);
+        }
+    })
 
     ;

@@ -10,7 +10,7 @@
 <div class="container" ng-app="HexaClicker" ng-controller="GameCtrl">
     <div class="hex-list">
         <div class="credit-box">
-            <span class="credit-label">Credit</span><span class="credit-amount">{{ prettify(credit) }}</span>
+            <span class="credit-label">Credit</span><span class="credit-amount">{{ credit | prettify }}</span>
         </div>
         <div purchase ng-repeat="hexa in hexalist" hexa-data="hexa" hexa-levels="hexaLevels" ng-show="hexa.achieved" credit="credit"></div>
     </div>
@@ -84,11 +84,11 @@
 
     <div class="progress-list">
         <div class="dps-box">
-            <span class="dps-label">DPS</span><span class="dps-amount">{{ getDPS().toFixed() }}</span>
+            <span class="dps-label">DPS</span><span class="dps-amount">{{ getDPS() | prettify }}</span>
         </div>
         <div class="level-box">
             <div class="progress" ng-style="{ 'width': currentHp / getCurrentLevel().hp * 280 +'px' }" ng-class="{animation: currentHp > 0}"></div>
-            <div class="progress-label">Lvl {{ currentLevel }} &nbsp; {{ prettify(currentHp.toFixed()) }} / {{ prettify(getCurrentLevel().hp) }}</div>
+            <div class="progress-label">Lvl {{ currentLevel }} &nbsp; {{ currentHp.toFixed() | prettify }} / {{ getCurrentLevel().hp | prettify }}</div>
         </div>
 
         <div class="level-box aura-title">Aura hexas 0/1</div>
