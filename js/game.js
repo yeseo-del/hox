@@ -185,12 +185,9 @@ angular.module('HexaClicker', [])
         return {
             templateUrl: 'slot.html',
             scope: {
-                slotData: '=',
-                currentTier: '=',
-                hexaLevels: '='
+                slotData: '='
             },
             link: function($scope, element) {
-                console.log('slot ', $scope.currentTier, $scope.slotData.tier);
                 $scope.purchaseActive = false;
 
                 $scope.$on('purchase', function(event, state){
@@ -218,10 +215,7 @@ angular.module('HexaClicker', [])
         return {
             templateUrl: 'purchase.html',
             scope: {
-                hexaData: '=',
-                hexaLevels: '=',
-                credit: '='
-
+                hexaData: '='
             },
             link: function($scope, element) {
                 $scope.buyHexa = function(id) {

@@ -1,7 +1,7 @@
-<div class="purchase-button" ng-class="{ inactive: credit < hexaData.price }" ng-click="buyHexa(hexaData.id)">
-    <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();">{{ hexaLevels[hexaData.id] }}</div>
+<div class="purchase-button" ng-class="{ inactive: $parent.credit < hexaData.price }" ng-click="buyHexa(hexaData.id)">
+    <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();">{{ $parent.hexaLevels[hexaData.id] }}</div>
 
-    <div class="stat"><i class="fa fa-crosshairs"></i> {{ calcDps(hexaData.baseDps, hexaData.increase, hexaLevels[hexaData.id]) }} / s</div>
+    <div class="stat"><i class="fa fa-crosshairs"></i> {{ calcDps(hexaData.baseDps, hexaData.increase, $parent.hexaLevels[hexaData.id]) }} / s</div>
     <div class="stat"><i class="fa fa-dollar"></i> {{ hexaData.price }}</div>
     <div class="stat"><i class="fa fa-angle-double-up"></i> {{ hexaData.upgrade }}</div>
 
