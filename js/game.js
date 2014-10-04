@@ -356,8 +356,14 @@ angular.module('HexaClicker', [])
             },
             link: function($scope, element) {
 
-                $scope.calcDps = function(baseDps, increase, level){
-                    return (baseDps * Math.pow(increase, level-1)).toFixed();
+                $scope.calcDps = function(){
+                    var dps = $scope.$parent.slotData.hexa.baseDps * (Math.pow($scope.$parent.slotData.hexa.increase, $scope.$parent.$parent.hexaLevels[$scope.$parent.slotData.hexa.id] - 1));
+
+                    $scope.$parent.slotData.effects.forEach(function(index) {
+                        dps *= $scope.$parent.$parent.slots[index].hexa.effect.dps;
+                    });
+
+                    return dps.toFixed();
                 }
             }
         };
