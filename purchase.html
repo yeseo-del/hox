@@ -1,9 +1,20 @@
-<div class="purchase-button" ng-class="{ inactive: $parent.credit < hexaData.price }" ng-click="buyHexa(hexaData.id)">
-    <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();">{{ $parent.hexaLevels[hexaData.id] }}</div>
+<div class="purchase-button" ng-class="{ inactive: $parent.credit < hexaData.price }" ng-click="buyHexa(hexaData)">
+    <div ng-if="hexaData.type == 1">
+        <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();">{{ $parent.$parent.hexaLevels[hexaData.id] }}</div>
 
-    <div class="stat"><i class="fa fa-crosshairs"></i> {{ calcDps(hexaData.baseDps, hexaData.increase, $parent.hexaLevels[hexaData.id]) }} / s</div>
-    <div class="stat"><i class="fa fa-dollar"></i> {{ hexaData.price }}</div>
-    <div class="stat"><i class="fa fa-angle-double-up"></i> {{ hexaData.upgrade }}</div>
+        <div class="stat"><i class="fa fa-crosshairs"></i> {{ calcDps(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id]) | prettify }} / s</div>
+        <div class="stat"><i class="fa fa-dollar"></i> {{ hexaData.price | prettify }}</div>
+        <div class="stat"><i class="fa fa-angle-double-up"></i> {{ hexaData.upgrade | prettify }}</div>
 
-    <div class="lvlup"><i class="fa fa-angle-right"></i></div>
+        <div class="lvlup"><i class="fa fa-angle-right"></i></div>
+    </div>
+    <div ng-if="hexaData.type == 2">
+        <div class="color-box" ng-style="{'background-color': hexaData.color}"></div>
+
+        <div class="stat"><i class="fa fa-dollar"></i> {{ hexaData.price | prettify }}</div>
+        <div class="stat"><i class="fa fa-clock-o"></i> {{ hexaData.cooldown }}s</div>
+        <div class="stat"><i class="fa fa-bolt"></i> {{ hexaData.description }}</div>
+
+        <div class="lvlup"><i class="fa fa-angle-right"></i></div>
+    </div>
 </div>
