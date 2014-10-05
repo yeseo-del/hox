@@ -75,6 +75,11 @@ body {
     stroke: #FF0000;
 }
 
+.slot.sell polygon {
+    stroke: #FF0000;
+    cursor: pointer;
+}
+
 svg {
     width: 100px;
     height: 115px;
@@ -254,6 +259,10 @@ div.grid-container {
 
 .upgrade.on-cooldown {
     opacity: 0.8;
+}
+
+.upgrade.active {
+    height: 117px;
 }
 
 .upgrade .upgrade-icon {

@@ -153,7 +153,7 @@ angular.module('HexaClicker', [])
         }
 
         $scope.slots = [
-            {slot: 0, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
+            {slot: 0, empty: false, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
             {slot: 1, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
             {slot: 2, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
             {slot: 3, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
@@ -194,8 +194,15 @@ angular.module('HexaClicker', [])
 
         $scope.selectedHexaForPurchase = undefined;
 
+        $scope.emptySlotCount = function() {
+            return emptySlots = $scope.slots.filter(function(slot){
+                return slot.tier <= $scope.tier && slot.empty;
+            }).length;
+        }
+
         var buyHexa = function(event, hexa) {
-            if($scope.credit >= hexa.price) {
+
+            if($scope.credit >= hexa.price && emptySlots > 0) {
                 $scope.selectedHexaForPurchase = hexa;
 
                 $scope.$broadcast('purchase', true);
@@ -229,6 +236,30 @@ angular.module('HexaClicker', [])
 
         $scope.$on('slotSelected', selectSlotForPurchase);
 
+        var selectSlotForSell = function(event, id) {
+            if($scope.slots[id].hexa.type == 2) {
+                $scope.highlight(id, false);
+                var affectedSlots = $scope.getAffectedSlots(id, $scope.slots[id].hexa.effect.type);
+                affectedSlots.forEach(function(affectedSlot){
+                    var i = $scope.slots[affectedSlot].effects.indexOf(id);
+                    if(i != -1) {
+                        $scope.slots[affectedSlot].effects.splice(i, 1);
+                    }
+                });
+            }
+
+            $scope.slots[id].hexa = EMPTY_SLOT;
+            $scope.slots[id].empty = true;
+            $scope.slots[id].cooldown = -1;
+            $scope.slots[id].effects = [];
+
+            $scope.sellActive = false;
+
+            $scope.$broadcast('sell', false);
+        }
+
+        $scope.$on('slotSelectedForSell', selectSlotForSell);
+
         $scope.hexaClick = function(index) {
             if($scope.purchaseActive) {
                 $scope.slots[index] = $scope.selectedHexaForPurchase;
@@ -236,6 +267,13 @@ angular.module('HexaClicker', [])
                 $scope.purchaseActive = false;
                 console.log($scope.slots);
             }
+        }
+
+        $scope.sellActive = false;
+
+        $scope.sellHexa = function(state) {
+            $scope.sellActive = state;
+            $scope.$broadcast('sell', state);
         }
 
         $scope.getCurrentLevel = function() {
@@ -248,7 +286,7 @@ angular.module('HexaClicker', [])
 
         $scope.levels = [ ];
 
-        for(var i = 1; i < 100; i++) {
+        for(var i = 1; i < 1000; i++) {
             $scope.levels.push({ lvl: i, hp: i*100, credit: i*100})
         }
 
@@ -299,6 +337,12 @@ angular.module('HexaClicker', [])
 
                 $scope.checkAchieved();
             }
+
+            if($scope.currentLevel == 21) {
+                $scope.tier = 2;
+            } else if( $scope.currentLevel == 51 ) {
+                $scope.tier = 3;
+            }
         }
 
         $scope.getDPS = function() {
@@ -319,11 +363,13 @@ angular.module('HexaClicker', [])
         }
 
         $scope.highlight = function(selectedSlot, value) {
-            var affectedSlots = $scope.getAffectedSlots(selectedSlot, $scope.slots[selectedSlot].hexa.effect.type);
+            if($scope.slots[selectedSlot].hexa.type == 2) {
+                var affectedSlots = $scope.getAffectedSlots(selectedSlot, $scope.slots[selectedSlot].hexa.effect.type);
 
-            affectedSlots.forEach(function(slot) {
-                $scope.slots[slot].highlighted = value;
-            });
+                affectedSlots.forEach(function(slot) {
+                    $scope.slots[slot].highlighted = value;
+                });
+            }
         }
 
     }])
@@ -335,14 +381,25 @@ angular.module('HexaClicker', [])
             },
             link: function($scope, element) {
                 $scope.purchaseActive = false;
+                $scope.sellActive = false;
 
                 $scope.$on('purchase', function(event, state){
                     $scope.purchaseActive = state;
                 });
 
-                $scope.selectSlot = function(id) {
+                $scope.$on('sell', function(event, state){
+                    $scope.sellActive = state;
+                });
+
+                $scope.selectSlotForSell = function(slot) {
+                    if($scope.sellActive) {
+                        $scope.$emit('slotSelectedForSell', slot);
+                    }
+                }
+
+                $scope.selectSlot = function(slot) {
                     if($scope.purchaseActive) {
-                        $scope.$emit('slotSelected', id);
+                        $scope.$emit('slotSelected', slot);
                     }
                 }
             }
@@ -377,7 +434,6 @@ angular.module('HexaClicker', [])
             link: function($scope, element) {
                 $scope.activate = function() {
                     if($scope.$parent.slotData.cooldown <= 0) {
-                        console.log('activate');
                         $scope.$parent.slotData.cooldown = $scope.$parent.slotData.hexa.cooldown;
 
                         var affectedSlots = $scope.$parent.$parent.getAffectedSlots($scope.$parent.slotData.slot, $scope.$parent.slotData.hexa.effect.type);
@@ -403,7 +459,9 @@ angular.module('HexaClicker', [])
             },
             link: function($scope, element) {
                 $scope.buyHexa = function(id) {
-                    $scope.$emit('buyHexa', id);
+                    if($scope.$parent.emptySlotCount() > 0) {
+                        $scope.$emit('buyHexa', id);
+                    }
                 }
 
                 $scope.upgradeHexa = function(id) {
