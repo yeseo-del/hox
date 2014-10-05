@@ -187,6 +187,17 @@ angular.module('HexaClicker', [])
             {slot: 36, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false}
         ];
 
+        $scope.maxUpgrades = function() {
+            switch ($scope.tier) {
+                case 1:
+                    return 1;
+                case 2:
+                    return 3;
+                case 3:
+                    return 6;
+            }
+        }
+
         $scope.selectedHexaForPurchase = undefined;
 
         $scope.emptySlotCount = function() {
@@ -196,6 +207,10 @@ angular.module('HexaClicker', [])
         }
 
         var buyHexa = function(event, hexa) {
+
+            if(hexa.type == 2 && $scope.upgradeCount() >= $scope.maxUpgrades()) {
+                return;
+            }
 
             if($scope.credit >= hexa.price && emptySlots > 0) {
                 $scope.selectedHexaForPurchase = hexa;
@@ -356,6 +371,12 @@ angular.module('HexaClicker', [])
                     $scope.slots[slot].highlighted = value;
                 });
             }
+        }
+
+        $scope.upgradeCount = function(){
+            return $scope.slots.filter(function(slot){
+                return slot.hexa.type == 2;
+            }).length;
         }
 
         $scope.saveGame = function(){

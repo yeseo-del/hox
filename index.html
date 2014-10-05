@@ -95,7 +95,7 @@
             <div class="progress-label">Lvl {{ currentLevel }} &nbsp; {{ currentHp.toFixed() | prettify }} / {{ getCurrentLevel().hp | prettify }}</div>
         </div>
 
-        <div class="level-box aura-title">Upgrades 0/1</div>
+        <div class="level-box aura-title">Upgrades {{ upgradeCount() }} / {{ maxUpgrades() }}</div>
         <div purchase ng-repeat="upgrade in upgradeList" hexa-data="upgrade" ng-show="upgrade.achieved"></div>
 
         <div class="help-box">
