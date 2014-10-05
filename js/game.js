@@ -135,7 +135,7 @@ angular.module('HexaClicker', [])
 
         $scope.upgradeList = [
             { id: 0, type: 2, color: "#84b096", price: 1000, achieved: true, cooldown: 10, effect: { type: EFFECT.HORIZONTAL, dps: 2 }, description: "Horiz. DPS" },
-            { id: 0, type: 2, color: "#d9afd7", price: 2000, achieved: true, cooldown: 5, effect: { type: EFFECT.AREA, dps: 2 }, description: "Area DPS" }
+            { id: 1, type: 2, color: "#d9afd7", price: 2000, achieved: true, cooldown: 5, effect: { type: EFFECT.AREA, dps: 2 }, description: "Area DPS" }
         ]
 
 
