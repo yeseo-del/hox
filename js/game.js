@@ -143,15 +143,6 @@ angular.module('HexaClicker', [])
             1,1,1,1,1,1,1,1,1
         ]
 
-        $scope.increaseTier = function() {
-            $scope.tier += 1;
-        }
-
-        $scope.addCredit = function(amount) {
-            $scope.credit += amount;
-            $scope.checkAchieved();
-        }
-
         $scope.calcByLevel = function(base, increase, level){
             return (base * Math.pow(increase, level-1)).toFixed();
         }
@@ -257,10 +248,6 @@ angular.module('HexaClicker', [])
             $scope.slots[id].empty = true;
             $scope.slots[id].cooldown = -1;
             $scope.slots[id].effects = [];
-
-            $scope.sellActive = false;
-
-            $scope.$broadcast('sell', false);
         }
 
         $scope.$on('slotSelectedForSell', selectSlotForSell);
@@ -282,17 +269,7 @@ angular.module('HexaClicker', [])
         }
 
         $scope.getCurrentLevel = function() {
-            return $scope.levels[$scope.currentLevel-1];
-        }
-
-        $scope.getLevels = function(from, count) {
-            return $scope.levels.slice(from-1, from-1 + count);
-        }
-
-        $scope.levels = [ ];
-
-        for(var i = 1; i < 1000; i++) {
-            $scope.levels.push({ lvl: i, hp: i*100, credit: i*100})
+            return { lvl: $scope.currentLevel, hp: (100 * Math.pow(1.1, $scope.currentLevel)).toFixed(0), credit: (100 * Math.pow(1.1, $scope.currentLevel))}
         }
 
         $scope.clickerHexa = function() {
@@ -336,6 +313,7 @@ angular.module('HexaClicker', [])
         var checkHp = function() {
             var level = $scope.getCurrentLevel();
             if($scope.currentHp >= level.hp) {
+                console.log(level.credit);
                 $scope.credit += level.credit;
                 $scope.currentLevel += 1;
                 $scope.currentHp = 0;

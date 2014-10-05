@@ -45,10 +45,10 @@ body {
 .slot .label {
     width: 100px;
     position: relative;
-    top: -77px;
+    top: -74px;
     z-index: 2;
     pointer-events:none;
-    font-size: 25px;
+    font-size: 21px;
     font-weight: bold;
     font-family:"SourceCodePro-Semibold";
     text-align: center;
@@ -273,4 +273,39 @@ div.grid-container {
 .slot .affected {
     color: #7fea7f;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.sell-button {
+    float: left;
+    height: 28px;
+    width: 276px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-family: "SourceCodePro-Semibold";
+    line-height: 28px;
+    background-color: red;
+    border: 2px solid #000000;
+}
+
+.sell-button:hover {
+    opacity: 0.9;
+    border: 2px solid red;
+}
+
+.sell-button.sell-inactive {
+    opacity: 0.6;
+}
+
+.help-box {
+    float: left;
+    margin-top: 20px;
+    padding: 10px;
+    height: 100px;
+    width: 280px;
+    color: white;
+    font-weight: bold;
+    font-family: "SourceCodePro-Semibold";
+    font-size: 13px;
 }

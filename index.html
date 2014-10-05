@@ -12,6 +12,10 @@
         <div class="credit-box">
             <span class="credit-label">Credit</span><span class="credit-amount">{{ credit | prettify }}</span>
         </div>
+        <div class="sell-button" ng-class="{'sell-active': sellActive, 'sell-inactive': !sellActive}">
+            <div ng-click="sellHexa(true)" ng-hide="sellActive">Sell Hexas</div>
+            <div ng-click="sellHexa(false)" ng-show="sellActive">Selling Active - Cancel</div>
+        </div>
         <div purchase ng-repeat="hexa in hexalist" hexa-data="hexa" ng-show="hexa.achieved"></div>
     </div>
 
@@ -93,14 +97,12 @@
 
         <div class="level-box aura-title">Upgrades 0/1</div>
         <div purchase ng-repeat="upgrade in upgradeList" hexa-data="upgrade" ng-show="upgrade.achieved"></div>
-    </div>
 
-    <button ng-click="sellHexa(true)" ng-hide="sellActive">sell hexa</button>     <button ng-click="sellHexa(false)" ng-show="sellActive">cancel sell</button>
-    <button ng-click="increaseTier()">increase tier</button>
-    <button ng-click="addCredit(1000)">1000 credit</button>
-    <br>
-    <span style="color: white; font-weight: bold;">Click on the + hexa to deal dmg. Click on the colored box to upgrade. Click on <i class="fa fa-angle-right"></i> to buy. <i class="fa fa-crosshairs"></i> - dps
-    <i class="fa fa-dollar"></i> - price <i class="fa fa-angle-double-up"></i> - upgrade. Click on the upgrade to activate it.</span>
+        <div class="help-box">
+            Click on the + hexa to deal dmg. Click on the colored box to upgrade. Click on <i class="fa fa-angle-right"></i> to buy. <i class="fa fa-crosshairs"></i> - dps
+    <i class="fa fa-dollar"></i> - price <i class="fa fa-angle-double-up"></i> - upgrade. Click on the upgrade to activate it.
+        </div>
+    </div>
 </div>
 
 

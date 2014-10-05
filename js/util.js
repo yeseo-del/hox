@@ -12,7 +12,7 @@ function prettify(number) {
         }
     }
 
-    return addThousandsSeparator(number);
+    return addThousandsSeparator(Math.floor((number * 1) / 1));
 }
 
 function addThousandsSeparator(value) {
