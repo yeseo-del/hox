@@ -103,9 +103,14 @@ angular.module('HexaClicker', [])
                     break;
                 case EFFECT.AREA:
                     DIRECTION.forEach(function(direction) {
-                        var s = $scope.getSlot( pos.q + direction.q, pos.r + direction.r );
-                        if(s != undefined) {
-                            slots.push(s);
+                        var dq = pos.q + direction.q;
+                        var dr = pos.r + direction.r;
+
+                        if(dq <= 3 && dq >= -3 && dr <= 3 && dr >= -3) {
+                            var s = $scope.getSlot( dq, dr );
+                            if(s != undefined) {
+                                slots.push(s);
+                            }
                         }
                     });
                     break;
