@@ -527,6 +527,13 @@ angular.module('HexaClicker', [])
                 hexaData: '='
             },
             link: function($scope, element) {
+
+                $scope.preview = false;
+
+                $scope.setPreview = function(value) {
+                    $scope.preview = value;
+                }
+
                 $scope.buyHexa = function(id) {
                     if($scope.$parent.emptySlotCount() > 0) {
                         $scope.$emit('buyHexa', id);

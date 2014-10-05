@@ -1,10 +1,22 @@
-<div class="purchase-button" ng-class="{ inactive: $parent.credit < hexaData.price }" ng-click="buyHexa(hexaData)">
+<div class="purchase-button" ng-class="{ inactive: $parent.credit < hexaData.price, preview: preview }" ng-click="buyHexa(hexaData)">
     <div ng-if="hexaData.type == 1">
-        <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();">{{ $parent.$parent.hexaLevels[hexaData.id] }}</div>
+        <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();"
+                ng-mouseenter="setPreview(true)" ng-mouseleave="setPreview(false)">
+            <div ng-hide="preview">{{ $parent.$parent.hexaLevels[hexaData.id] }}</div>
+            <div ng-show="preview">{{ $parent.$parent.hexaLevels[hexaData.id] + 1 }}</div>
+        </div>
 
-        <div class="stat"><i class="fa fa-crosshairs"></i> {{ calcByLevel(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id]) | prettify }} / s</div>
+        <div class="stat">
+            <div ng-hide="preview"><i class="fa fa-crosshairs"></i> {{ calcByLevel(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id]) | prettify }} / s</div>
+            <div ng-show="preview"><i class="fa fa-crosshairs"></i> {{ calcByLevel(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id] + 1) | prettify }} / s</div>
+            <div></div>
+        </div>
         <div class="stat"><i class="fa fa-dollar"></i> {{ hexaData.price | prettify }}</div>
-        <div class="stat"><i class="fa fa-angle-double-up"></i> {{ calcByLevel(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id]) | prettify }}</div>
+        <div class="stat">
+            <div ng-hide="preview"><i class="fa fa-angle-double-up"></i> {{ calcByLevel(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id]) | prettify }}</div>
+            <div ng-show="preview"><i class="fa fa-angle-double-up"></i> {{ calcByLevel(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id] + 1) | prettify }}</div>
+
+        </div>
 
         <div class="lvlup"><i class="fa fa-angle-right"></i></div>
     </div>
