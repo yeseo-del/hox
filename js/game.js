@@ -302,6 +302,10 @@ angular.module('HexaClicker', [])
             });
         }, 1000);
 
+        $interval(function(){
+            $scope.saveGame();
+        }, 30000);
+
         $scope.checkAchieved = function() {
             for(var i = 0; i < $scope.hexalist.length - 1; i++) {
                 if($scope.credit >= $scope.hexalist[i].price) {
@@ -313,7 +317,6 @@ angular.module('HexaClicker', [])
         var checkHp = function() {
             var level = $scope.getCurrentLevel();
             if($scope.currentHp >= level.hp) {
-                console.log(level.credit);
                 $scope.credit += level.credit;
                 $scope.currentLevel += 1;
                 $scope.currentHp = 0;
@@ -354,6 +357,63 @@ angular.module('HexaClicker', [])
                 });
             }
         }
+
+        $scope.saveGame = function(){
+            var saveObj = {};
+
+            saveObj.credit = $scope.credit;
+            saveObj.currentLevel = $scope.currentLevel;
+            saveObj.tier = $scope.tier;
+            saveObj.currentHp = $scope.currentHp;
+            saveObj.hexaLevels = $scope.hexaLevels;
+            saveObj.slots = [];
+
+            $scope.slots.forEach(function(slot) {
+                saveObj.slots.push({type: slot.hexa.type, id: slot.hexa.id, cooldown: slot.cooldown, empty: slot.empty, effects: slot.effects});
+            });
+
+            saveObj.hexalist = [];
+
+            $scope.hexalist.forEach(function(hexa) {
+                saveObj.hexalist.push({achieved: hexa.achieved});
+            });
+
+            console.log("SAVE: ", saveObj);
+            window.localStorage.setItem("hexaclickersave", JSON.stringify(saveObj));
+        }
+
+        $scope.loadGame = function(){
+            var saveObj = JSON.parse(window.localStorage.getItem("hexaclickersave"));
+
+            if(saveObj != undefined) {
+                console.log("LOAD: ", saveObj);
+
+                $scope.credit = saveObj.credit;
+                $scope.currentLevel = saveObj.currentLevel;
+                $scope.tier = saveObj.tier;
+                $scope.currentHp = saveObj.currentHp;
+                $scope.hexaLevels = saveObj.hexaLevels;
+
+                saveObj.slots.forEach(function(slot, index) {
+                    if(slot.type == 1) {
+                        $scope.slots[index].hexa = $scope.hexalist[slot.id];
+                    } else if(slot.type == 2) {
+                        $scope.slots[index].hexa = $scope.upgradeList[slot.id];
+                    }
+                    $scope.slots[index].cooldown = slot.cooldown;
+                    $scope.slots[index].empty = slot.empty;
+                    $scope.slots[index].effects = slot.effects;
+                });
+
+                saveObj.hexalist.forEach(function(hexa, index) {
+                    $scope.hexalist[index].achieved = hexa.achieved;
+                });
+            } else {
+                console.log('NO SAVE FOUND');
+            }
+        }
+
+        $scope.loadGame();
 
     }])
     .directive('slot', function() {

@@ -99,8 +99,14 @@
         <div purchase ng-repeat="upgrade in upgradeList" hexa-data="upgrade" ng-show="upgrade.achieved"></div>
 
         <div class="help-box">
-            Click on the + hexa to deal dmg. Click on the colored box to upgrade. Click on <i class="fa fa-angle-right"></i> to buy. <i class="fa fa-crosshairs"></i> - dps
-    <i class="fa fa-dollar"></i> - price <i class="fa fa-angle-double-up"></i> - upgrade. Click on the upgrade to activate it.
+            <ul>
+                <li>Click on the + hexa to deal dmg.</li>
+                <li>Click on the colored box to upgrade.</li>
+                <li>Click on <i class="fa fa-angle-right"></i> to buy.</li>
+                <li><i class="fa fa-crosshairs"></i> - dps <i class="fa fa-dollar"></i> - price <i class="fa fa-angle-double-up"></i> - upgrade.</li>
+                <li>Click on the upgrade to activate it.</li>
+            </ul>
+            <button ng-click="saveGame()">Manual Save</button>
         </div>
     </div>
 </div>
