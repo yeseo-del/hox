@@ -2,9 +2,9 @@
     <div ng-if="hexaData.type == 1">
         <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();">{{ $parent.$parent.hexaLevels[hexaData.id] }}</div>
 
-        <div class="stat"><i class="fa fa-crosshairs"></i> {{ calcDps(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id]) | prettify }} / s</div>
+        <div class="stat"><i class="fa fa-crosshairs"></i> {{ calcByLevel(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id]) | prettify }} / s</div>
         <div class="stat"><i class="fa fa-dollar"></i> {{ hexaData.price | prettify }}</div>
-        <div class="stat"><i class="fa fa-angle-double-up"></i> {{ hexaData.upgrade | prettify }}</div>
+        <div class="stat"><i class="fa fa-angle-double-up"></i> {{ calcByLevel(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id]) | prettify }}</div>
 
         <div class="lvlup"><i class="fa fa-angle-right"></i></div>
     </div>
