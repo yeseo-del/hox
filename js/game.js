@@ -3,6 +3,11 @@ angular.module('HexaClicker', [])
         $scope.SAVE_VERSION = 1;
         $scope.credit = 0;
 
+        $scope.maxLevel = 1;
+        $scope.kills = 0;
+        $scope.farmMode = false;
+        $scope.bossTimer = 0;
+
         $scope.prettify = function(number) {
             return prettify(number);
         }
@@ -300,11 +305,11 @@ angular.module('HexaClicker', [])
                 : 10 * Math.pow( 1.6, $scope.currentLevel - 1) / 15 * 2
             );
 
-            return { lvl: $scope.currentLevel, hp: hp, credit: credit }
+            return { lvl: $scope.currentLevel, hp: hp, credit: credit, boss: $scope.currentLevel % 5 == 0 }
         }
 
         $scope.clickerHexa = function() {
-            $scope.currentHp += 10;
+            $scope.currentHp += 10 + $scope.getDPS() * 0.1;
             checkHp();
         }
 
@@ -349,17 +354,58 @@ angular.module('HexaClicker', [])
             var level = $scope.getCurrentLevel();
             if($scope.currentHp >= level.hp) {
                 $scope.credit += level.credit;
-                $scope.currentLevel += 1;
+                if(level.boss && $scope.kills < 1 || !level.boss && $scope.kills < 10) {
+                    $scope.kills++;
+                }
+
                 $scope.currentHp = 0;
+
+                if(level.boss && $scope.bossTimer > 0) {
+                    $interval.cancel(bossTimerInterval);
+                    $scope.bossTimer = 0;
+                }
+
+                if((level.boss && $scope.kills == 1 || !level.boss && $scope.kills == 10) && !$scope.farmMode) {
+                    $scope.currentLevel += 1;
+                    if($scope.maxLevel < $scope.currentLevel) {
+                        $scope.maxLevel = $scope.currentLevel;
+                    }
+                    $scope.kills = 0;
+                }
 
                 $scope.checkAchieved();
             }
 
-            if($scope.currentLevel == 21) {
+            if($scope.getCurrentLevel().boss && $scope.bossTimer == 0) {
+                $scope.startBossTimer();
+            }
+
+            if($scope.currentLevel == 50) {
                 $scope.tier = 2;
-            } else if( $scope.currentLevel == 51 ) {
+            } else if( $scope.currentLevel == 100 ) {
                 $scope.tier = 3;
             }
+        }
+
+        var bossTimerInterval = undefined;
+
+        $scope.startBossTimer = function() {
+
+            if($scope.bossTimer == 0) {
+                $scope.bossTimer = 30;
+            }
+
+            bossTimerInterval = $interval(function(){
+                $scope.bossTimer--;
+                if($scope.bossTimer == 0) {
+                    $interval.cancel(bossTimerInterval);
+                    bossTimerInterval = undefined;
+                    $scope.currentLevel--;
+                    $scope.kills = 10;
+                    $scope.currentHp = 0;
+                    $scope.farmMode = true;
+                }
+            }, 1000);
         }
 
         $scope.getDPS = function() {
@@ -400,6 +446,10 @@ angular.module('HexaClicker', [])
 
             saveObj.credit = $scope.credit;
             saveObj.currentLevel = $scope.currentLevel;
+            saveObj.maxLevel = $scope.maxLevel;
+            saveObj.kills = $scope.kills;
+            saveObj.bossTimer = $scope.bossTimer;
+            saveObj.farmMode = $scope.farmMode;
             saveObj.tier = $scope.tier;
             saveObj.currentHp = $scope.currentHp;
             saveObj.hexaLevels = $scope.hexaLevels;
@@ -429,6 +479,10 @@ angular.module('HexaClicker', [])
 
                 $scope.credit = saveObj.credit;
                 $scope.currentLevel = saveObj.currentLevel;
+                $scope.maxLevel = saveObj.maxLevel;
+                $scope.kills = saveObj.kills;
+                $scope.bossTimer = saveObj.bossTimer;
+                $scope.farmMode = saveObj.farmMode;
                 $scope.tier = saveObj.tier;
                 $scope.currentHp = saveObj.currentHp;
                 $scope.hexaLevels = saveObj.hexaLevels;
@@ -447,6 +501,10 @@ angular.module('HexaClicker', [])
                 saveObj.hexalist.forEach(function(hexa, index) {
                     $scope.hexalist[index].achieved = hexa.achieved;
                 });
+
+                if($scope.bossTimer > 0) {
+                    $scope.startBossTimer();
+                }
             } else {
                 console.log('NO SAVE FOUND');
             }

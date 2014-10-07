@@ -93,6 +93,18 @@
         <div class="level-box">
             <div class="progress" ng-style="{ 'width': currentHp / getCurrentLevel().hp * 280 +'px' }" ng-class="{animation: currentHp > 0}"></div>
             <div class="progress-label">Lvl {{ currentLevel }} &nbsp; {{ currentHp.toFixed() | prettify }} / {{ getCurrentLevel().hp | prettify }}</div>
+            <div class="boss-timer-box" ng-if="bossTimer > 0">
+                <div class="boss-timer-box progress" ng-style="{ 'width': bossTimer / 30 * 280 +'px' }"></div>
+                <div class="boss-timer-box-label">Time: {{ bossTimer }} s</div>
+            </div>
+            <div class="kill-box" ng-if="kills < 10 && !getCurrentLevel().boss">
+                <div class="kill-box progress" ng-style="{ 'width': kills / 10 * 280 +'px' }"></div>
+                <div class="kill-box-label"> Kills: {{ kills }} / 10</div>
+            </div>
+            <div class="farm-button">
+                <div ng-click="farmMode = !farmMode" ng-hide="farmMode">Progress</div>
+                <div ng-click="farmMode = !farmMode" ng-show="farmMode">Farm</div>
+            </div>
         </div>
 
         <div class="level-box aura-title">Upgrades {{ upgradeCount() }} / {{ maxUpgrades() }}</div>
