@@ -7,14 +7,14 @@
         </div>
 
         <div class="stat">
-            <div ng-hide="preview"><i class="fa fa-crosshairs"></i> {{ calcByLevel(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id]) | prettify }} / s</div>
-            <div ng-show="preview"><i class="fa fa-crosshairs"></i> {{ calcByLevel(hexaData.baseDps, hexaData.increase, $parent.$parent.hexaLevels[hexaData.id] + 1) | prettify }} / s</div>
+            <div ng-hide="preview"><i class="fa fa-crosshairs"></i> {{ calcDps(hexaData.baseDps, $parent.$parent.hexaLevels[hexaData.id]) | prettify }} / s</div>
+            <div ng-show="preview"><i class="fa fa-crosshairs"></i> {{ calcDps(hexaData.baseDps, $parent.$parent.hexaLevels[hexaData.id] + 1) | prettify }} / s</div>
             <div></div>
         </div>
         <div class="stat"><i class="fa fa-dollar"></i> {{ hexaData.price | prettify }}</div>
         <div class="stat">
-            <div ng-hide="preview"><i class="fa fa-angle-double-up"></i> {{ calcByLevel(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id]) | prettify }}</div>
-            <div ng-show="preview"><i class="fa fa-angle-double-up"></i> {{ calcByLevel(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id] + 1) | prettify }}</div>
+            <div ng-hide="preview"><i class="fa fa-angle-double-up"></i> {{ calcUpgrade(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id]) | prettify }}</div>
+            <div ng-show="preview"><i class="fa fa-angle-double-up"></i> {{ calcUpgrade(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id] + 1) | prettify }}</div>
 
         </div>
 

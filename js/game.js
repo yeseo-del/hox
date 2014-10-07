@@ -127,15 +127,15 @@ angular.module('HexaClicker', [])
         var EMPTY_SLOT = { id: 0, type: 0, color: "#373737", baseDps: 0, increase: 1.0, price: 0 };
 
         $scope.hexalist = [
-            { id: 0, type: 1, color: "#ea8a00", baseDps: 10, increase: 1.1, price: 100, upgrade: 200, upgradeIncrease: 1.1, achieved: true},
-            { id: 1, type: 1, color: "#bae272", baseDps: 20, increase: 1.1, price: 500, upgrade: 1000, upgradeIncrease: 1.1, achieved: false },
-            { id: 2, type: 1, color: "#541a30", baseDps: 40, increase: 1.1, price: 1000, upgrade: 2000, upgradeIncrease: 1.1, achieved: false },
-            { id: 3, type: 1, color: "#d9afd7", baseDps: 60, increase: 1.1, price: 2000, upgrade: 4000, upgradeIncrease: 1.1, achieved: false },
-            { id: 4, type: 1, color: "#f1d888", baseDps: 80, increase: 1.1, price: 4000, upgrade: 8000, upgradeIncrease: 1.1, achieved: false },
-            { id: 5, type: 1, color: "#586fa1", baseDps: 100, increase: 1.1, price: 8000, upgrade: 16000, upgradeIncrease: 1.1, achieved: false },
-            { id: 6, type: 1, color: "#efeae2", baseDps: 200, increase: 1.1, price: 16000, upgrade: 32000, upgradeIncrease: 1.1,achieved: false },
-            { id: 7, type: 1, color: "#00b0ff", baseDps: 400, increase: 1.1, price: 32000, upgrade: 64000, upgradeIncrease: 1.1, achieved: false },
-            { id: 8, type: 1, color: "#84b096", baseDps: 600, increase: 1.1, price: 64000, upgrade: 128000, upgradeIncrease: 1.1, achieved: false }
+            { id: 0, type: 1, color: "#ea8a00", baseDps: 5, price: 50, upgrade: 50, upgradeIncrease: 1.07, achieved: true},
+            { id: 1, type: 1, color: "#bae272", baseDps: 22, price: 250, upgrade: 250, upgradeIncrease: 1.07, achieved: false },
+            { id: 2, type: 1, color: "#541a30", baseDps: 74, price: 1e+3, upgrade: 1e+3, upgradeIncrease: 1.07, achieved: false },
+            { id: 3, type: 1, color: "#d9afd7", baseDps: 245, price: 4e+3, upgrade: 4e+3, upgradeIncrease: 1.07, achieved: false },
+            { id: 4, type: 1, color: "#f1d888", baseDps: 976, price: 20e+3, upgrade: 20e+3, upgradeIncrease: 1.07, achieved: false },
+            { id: 5, type: 1, color: "#586fa1", baseDps: 3725, price: 100e+3, upgrade: 100e+3, upgradeIncrease: 1.07, achieved: false },
+            { id: 6, type: 1, color: "#efeae2", baseDps: 10.859e+3, price: 400e+3, upgrade: 400e+3, upgradeIncrease: 1.07, achieved: false },
+            { id: 7, type: 1, color: "#00b0ff", baseDps: 47.143e+3, price: 2.5e+6, upgrade: 2.5e+6, upgradeIncrease: 1.07, achieved: false },
+            { id: 8, type: 1, color: "#84b096", baseDps: 186e+3, price: 15e+6, upgrade: 15e+6, upgradeIncrease: 1.07, achieved: false }
         ]
 
         $scope.upgradeList = [
@@ -289,7 +289,17 @@ angular.module('HexaClicker', [])
         }
 
         $scope.getCurrentLevel = function() {
-            return { lvl: $scope.currentLevel, hp: (100 * Math.pow(1.1, $scope.currentLevel)).toFixed(0), credit: (100 * Math.pow(1.1, $scope.currentLevel))}
+            var hp = ($scope.currentLevel % 5 == 0
+                ? 10 * Math.pow( 1.6, $scope.currentLevel - 1) * 10
+                : 10 * Math.pow( 1.6, $scope.currentLevel - 1)
+            );
+
+            var credit = ($scope.currentLevel % 5 == 0
+                ? (10 * Math.pow( 1.6, $scope.currentLevel - 1) * 10) / 15 * 2
+                : 10 * Math.pow( 1.6, $scope.currentLevel - 1) / 15 * 2
+            );
+
+            return { lvl: $scope.currentLevel, hp: hp, credit: credit }
         }
 
         $scope.clickerHexa = function() {
@@ -355,7 +365,7 @@ angular.module('HexaClicker', [])
             var sum = 0;
             $scope.slots.forEach(function(slot) {
                 if(slot.hexa.type == 1) {
-                    var dps = slot.hexa.baseDps * (Math.pow(slot.hexa.increase, $scope.hexaLevels[slot.hexa.id] - 1));
+                    var dps = slot.hexa.baseDps * $scope.hexaLevels[slot.hexa.id];
 
                     slot.effects.forEach(function(index) {
                         dps *= $scope.slots[index].hexa.effect.dps;
@@ -483,7 +493,7 @@ angular.module('HexaClicker', [])
             link: function($scope, element) {
 
                 $scope.calcDps = function(){
-                    var dps = $scope.$parent.slotData.hexa.baseDps * (Math.pow($scope.$parent.slotData.hexa.increase, $scope.$parent.$parent.hexaLevels[$scope.$parent.slotData.hexa.id] - 1));
+                    var dps = $scope.$parent.slotData.hexa.baseDps * $scope.$parent.$parent.hexaLevels[$scope.$parent.slotData.hexa.id];
 
                     $scope.$parent.slotData.effects.forEach(function(index) {
                         dps *= $scope.$parent.$parent.slots[index].hexa.effect.dps;
@@ -545,8 +555,12 @@ angular.module('HexaClicker', [])
                     $scope.$emit('upgradeHexa', id);
                 }
 
-                $scope.calcByLevel = function(base, increase, level){
+                $scope.calcUpgrade = function(base, increase, level){
                     return (base * Math.pow(increase, level-1)).toFixed();
+                }
+
+                $scope.calcDps = function(base, level){
+                    return (base * level).toFixed();
                 }
             }
         };
