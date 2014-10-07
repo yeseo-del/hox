@@ -1,5 +1,6 @@
 angular.module('HexaClicker', [])
     .controller('GameCtrl', ['$scope', '$interval', function($scope, $interval) {
+        $scope.SAVE_VERSION = 1;
         $scope.credit = 0;
 
         $scope.prettify = function(number) {
@@ -416,12 +417,14 @@ angular.module('HexaClicker', [])
 
             console.log("SAVE: ", saveObj);
             window.localStorage.setItem("hexaclickersave", JSON.stringify(saveObj));
+            window.localStorage.setItem("hexaclickersaveversion", $scope.SAVE_VERSION);
         }
 
         $scope.loadGame = function(){
             var saveObj = JSON.parse(window.localStorage.getItem("hexaclickersave"));
+            var saveVersion = window.localStorage.getItem("hexaclickersaveversion");
 
-            if(saveObj != undefined) {
+            if(saveObj != undefined && saveVersion != undefined && saveVersion >= $scope.SAVE_VERSION) {
                 console.log("LOAD: ", saveObj);
 
                 $scope.credit = saveObj.credit;
