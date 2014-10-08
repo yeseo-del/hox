@@ -255,16 +255,16 @@ svg {
 }
 
 .container {
-    width: 1312px;
+    width: 1330px;
     margin-left: auto;
     margin-right: auto;
 }
 
 div.grid-container {
-    border: 1px solid black;
     width: 700px;
     height: 700px;
     padding: 5px;
+    padding-left: 25px;
     float: left;
 }
 
@@ -358,7 +358,7 @@ div.grid-container {
 .farm-button {
     float: left;
     height: 28px;
-    width: 280px;
+    width: 200px;
     cursor: pointer;
     text-align: center;
     font-family: "SourceCodePro-Semibold";
@@ -370,6 +370,24 @@ div.grid-container {
 
 .farm-button:hover {
     opacity: 0.9;
+}
+
+.level-step-button {
+    margin-top: 8px;
+    float: left;
+    width: 40px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.purchase-list {
+    width: 310px;
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .help-box {

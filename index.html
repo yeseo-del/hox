@@ -16,7 +16,10 @@
             <div ng-click="sellHexa(true)" ng-hide="sellActive">Sell Hexas</div>
             <div ng-click="sellHexa(false)" ng-show="sellActive">Selling Active - Cancel</div>
         </div>
-        <div purchase ng-repeat="hexa in hexalist" hexa-data="hexa" ng-show="hexa.achieved"></div>
+        <div class="purchase-list">
+            <div purchase ng-repeat="hexa in hexalist" hexa-data="hexa" ng-show="hexa.achieved"></div>
+        </div>
+
     </div>
 
     <div class="grid-container">
@@ -101,10 +104,15 @@
                 <div class="kill-box progress" ng-style="{ 'width': kills / 10 * 280 +'px' }"></div>
                 <div class="kill-box-label"> Kills: {{ kills }} / 10</div>
             </div>
-            <div class="farm-button">
-                <div ng-click="farmMode = !farmMode" ng-hide="farmMode">Progress</div>
-                <div ng-click="farmMode = !farmMode" ng-show="farmMode">Farm</div>
+            <div>
+                <div class="level-step-button" ng-click="changeLevel(-1)" ng-show="currentLevel > 1"><i class="fa fa-angle-double-left"></i></div>
+                <div class="farm-button">
+                    <div ng-click="farmMode = !farmMode" ng-hide="farmMode">Progress</div>
+                    <div ng-click="farmMode = !farmMode" ng-show="farmMode">Farm</div>
+                </div>
+                <div class="level-step-button" ng-click="changeLevel(1)" ng-show="currentLevel < maxLevel"><i class="fa fa-angle-double-right"></i></div>
             </div>
+
         </div>
 
         <div class="level-box aura-title">Upgrades {{ upgradeCount() }} / {{ maxUpgrades() }}</div>

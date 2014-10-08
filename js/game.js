@@ -365,12 +365,14 @@ angular.module('HexaClicker', [])
                     $scope.bossTimer = 0;
                 }
 
-                if((level.boss && $scope.kills == 1 || !level.boss && $scope.kills == 10) && !$scope.farmMode) {
+                if((level.boss && $scope.kills >= 1 || !level.boss && $scope.kills >= 10) && !$scope.farmMode) {
                     $scope.currentLevel += 1;
                     if($scope.maxLevel < $scope.currentLevel) {
                         $scope.maxLevel = $scope.currentLevel;
                     }
-                    $scope.kills = 0;
+                    if($scope.currentLevel == $scope.maxLevel) {
+                        $scope.kills = 0;
+                    }
                 }
 
                 $scope.checkAchieved();
@@ -380,10 +382,32 @@ angular.module('HexaClicker', [])
                 $scope.startBossTimer();
             }
 
-            if($scope.currentLevel == 50) {
+            if($scope.currentLevel == 30) {
                 $scope.tier = 2;
-            } else if( $scope.currentLevel == 100 ) {
+            } else if( $scope.currentLevel == 60 ) {
                 $scope.tier = 3;
+            }
+        }
+
+        $scope.changeLevel = function(value) {
+            if(value == -1 && $scope.currentLevel == 0 || value == 1 && $scope.currentLevel == $scope.maxLevel) {
+                return;
+            }
+
+            if($scope.getCurrentLevel().boss && $scope.bossTimer > 0) {
+                $interval.cancel(bossTimerInterval);
+                $scope.bossTimer = 0;
+            }
+
+            $scope.currentLevel += value;
+            $scope.currentHp = 0;
+
+            if(value == -1) {
+                $scope.kills = 10;
+            }
+
+            if($scope.currentLevel == $scope.maxLevel) {
+                $scope.kills = 0;
             }
         }
 
