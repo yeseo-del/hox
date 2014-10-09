@@ -141,17 +141,33 @@ angular.module('HexaClicker', [])
             { id: 5, type: 1, color: "#586fa1", baseDps: 3725, price: 100e+3, upgrade: 100e+3, upgradeIncrease: 1.07, achieved: false },
             { id: 6, type: 1, color: "#efeae2", baseDps: 10.859e+3, price: 400e+3, upgrade: 400e+3, upgradeIncrease: 1.07, achieved: false },
             { id: 7, type: 1, color: "#00b0ff", baseDps: 47.143e+3, price: 2.5e+6, upgrade: 2.5e+6, upgradeIncrease: 1.07, achieved: false },
-            { id: 8, type: 1, color: "#84b096", baseDps: 186e+3, price: 15e+6, upgrade: 15e+6, upgradeIncrease: 1.07, achieved: false }
+            { id: 8, type: 1, color: "#84b096", baseDps: 186e+3, price: 15e+6, upgrade: 15e+6, upgradeIncrease: 1.07, achieved: false },
+            { id: 9, type: 1, color: "#FFF79A", baseDps: 782e+3, price: 100e+6, upgrade: 100e+6, upgradeIncrease: 1.07, achieved: false },
+            { id: 10, type: 1, color: "#8882BE", baseDps: 3721e+3, price: 800e+6, upgrade: 800e+6, upgradeIncrease: 1.07, achieved: false },
+            { id: 11, type: 1, color: "#6ECFF6", baseDps: 17010e+3, price: 6.5e+9, upgrade: 6.5e+9, upgradeIncrease: 1.07, achieved: false },
+            { id: 12, type: 1, color: "#F6989D", baseDps: 69480e+3, price: 50e+9, upgrade: 50e+9, upgradeIncrease: 1.07, achieved: false },
+            { id: 13, type: 1, color: "#FDC68A", baseDps: 460e+6, price: 450e+9, upgrade: 450e+9, upgradeIncrease: 1.07, achieved: false },
+            { id: 14, type: 1, color: "#C4DF9B", baseDps: 3e+9, price: 4e+12, upgrade: 4e+12, upgradeIncrease: 1.07, achieved: false },
+            { id: 15, type: 1, color: "#7EA7D8", baseDps: 20e+9, price: 36e+12, upgrade: 36e+12, upgradeIncrease: 1.07, achieved: false },
+            { id: 16, type: 1, color: "#F49AC2", baseDps: 131e+9, price: 320e+12, upgrade: 320e+12, upgradeIncrease: 1.07, achieved: false },
+            { id: 17, type: 1, color: "#F7977A", baseDps: 698e+9, price: 2.7e+15, upgrade: 2.7e+15, upgradeIncrease: 1.07, achieved: false },
+            { id: 18, type: 1, color: "#8493CA", baseDps: 5330e+9, price: 24e+15, upgrade: 24e+15, upgradeIncrease: 1.07, achieved: false },
+            { id: 19, type: 1, color: "#82CA9D", baseDps: 490e+12, price: 300e+15, upgrade: 300e+15, upgradeIncrease: 1.07, achieved: false },
+            { id: 20, type: 1, color: "#C69C6E", baseDps: 1086e+12, price: 9e+18, upgrade: 9e+18, upgradeIncrease: 1.07, achieved: false },
+            { id: 21, type: 1, color: "#7A0026", baseDps: 31e+15, price: 350e+18, upgrade: 350e+18, upgradeIncrease: 1.07, achieved: false },
+            { id: 22, type: 1, color: "#8DC73F", baseDps: 917e+15, price: 14e+21, upgrade: 14e+21, upgradeIncrease: 1.07, achieved: false },
+            { id: 23, type: 1, color: "#FFF467", baseDps: 1013e+18, price: 4199e+21, upgrade: 4199e+21, upgradeIncrease: 1.07, achieved: false },
+            { id: 24, type: 1, color: "#00AEEF", baseDps: 74e+21, price: 2100e+24, upgrade: 2100e+24, upgradeIncrease: 1.07, achieved: false }
         ]
 
         $scope.upgradeList = [
-            { id: 0, type: 2, color: "#84b096", price: 1000, achieved: true, cooldown: 10, effect: { type: EFFECT.HORIZONTAL, dps: 2 }, description: "Horiz. DPS" },
-            { id: 1, type: 2, color: "#d9afd7", price: 2000, achieved: true, cooldown: 5, effect: { type: EFFECT.AREA, dps: 2 }, description: "Area DPS" }
+            { id: 0, type: 2, color: "#586fa1", price: 1000, achieved: true, cooldown: 10, effect: { type: EFFECT.HORIZONTAL, dps: 2 }, description: "Horiz. DPS" },
+            { id: 1, type: 2, color: "#ea8a00", price: 2000, achieved: true, cooldown: 5, effect: { type: EFFECT.AREA, dps: 2 }, description: "Area DPS" }
         ]
 
 
         $scope.hexaLevels = [
-            1,1,1,1,1,1,1,1,1
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
         ]
 
         $scope.calcByLevel = function(base, increase, level){
@@ -309,7 +325,7 @@ angular.module('HexaClicker', [])
         }
 
         $scope.clickerHexa = function() {
-            $scope.currentHp += 10 + $scope.getDPS() * 0.1;
+            $scope.currentHp += 5 + $scope.getDPS() * 0.1;
             checkHp();
         }
 
@@ -463,6 +479,13 @@ angular.module('HexaClicker', [])
             return $scope.slots.filter(function(slot){
                 return slot.hexa.type == 2;
             }).length;
+        }
+
+        $scope.resetGame = function() {
+            if(confirm("Are you sure?")) {
+                window.localStorage.removeItem("hexaclickersave");
+                window.location.reload();
+            }
         }
 
         $scope.saveGame = function(){

@@ -105,12 +105,12 @@
                 <div class="kill-box-label"> Kills: {{ kills }} / 10</div>
             </div>
             <div>
-                <div class="level-step-button" ng-click="changeLevel(-1)" ng-show="currentLevel > 1"><i class="fa fa-angle-double-left"></i></div>
+                <div class="level-step-button" ng-click="changeLevel(-1)"><i ng-show="currentLevel > 1" class="fa fa-angle-double-left"></i></div>
                 <div class="farm-button">
                     <div ng-click="farmMode = !farmMode" ng-hide="farmMode">Progress</div>
                     <div ng-click="farmMode = !farmMode" ng-show="farmMode">Farm</div>
                 </div>
-                <div class="level-step-button" ng-click="changeLevel(1)" ng-show="currentLevel < maxLevel"><i class="fa fa-angle-double-right"></i></div>
+                <div class="level-step-button" ng-click="changeLevel(1)"><i ng-show="currentLevel < maxLevel" class="fa fa-angle-double-right"></i></div>
             </div>
 
         </div>
@@ -127,6 +127,7 @@
                 <li>Click on the upgrade to activate it.</li>
             </ul>
             <button ng-click="saveGame()">Manual Save</button>
+            <button ng-click="resetGame()">Hard reset</button>
         </div>
     </div>
 </div>
