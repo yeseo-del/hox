@@ -4,6 +4,8 @@
     <title>HexaClicker v0.2</title>
     <link rel="stylesheet" href="css/style.css" />
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta property="og:image" content="http://hexaclicker.github.io/icon.png"/>
+    <meta property="og:image:secure_url" content="https://hexaclicker.github.io/icon.png" />
 </head>
 <body>
 
@@ -19,6 +21,7 @@
         <div class="purchase-list">
             <div purchase ng-repeat="hexa in hexalist" hexa-data="hexa" ng-show="hexa.achieved"></div>
         </div>
+        <div class="fb-like" data-href="http://hexaclicker.github.io/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
 
     </div>
 
@@ -148,5 +151,13 @@
     ga('send', 'pageview');
 
 </script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_EN/sdk.js#xfbml=1&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 </body>
 </html>
