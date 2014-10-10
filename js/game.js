@@ -515,7 +515,7 @@ angular.module('HexaClicker', [])
         }
 
         $scope.resetGame = function() {
-            if(confirm("Are you sure?")) {
+            if(confirm("Are you sure? You'll lose all your progress.")) {
                 window.localStorage.removeItem("hexaclickersave");
                 window.location.reload();
             }
