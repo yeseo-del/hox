@@ -1,6 +1,6 @@
 angular.module('HexaClicker', [])
     .controller('GameCtrl', ['$scope', '$interval', function($scope, $interval) {
-        $scope.SAVE_VERSION = 1;
+        $scope.SAVE_VERSION = 2;
         $scope.credit = 0;
 
         $scope.maxLevel = 1;
