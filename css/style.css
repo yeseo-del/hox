@@ -75,9 +75,40 @@ body {
     stroke: #FF0000;
 }
 
+#alert {color: #39f !important;}
+@-webkit-keyframes colours {
+    0% {stroke: #5b0000;}
+    50% {stroke: #FF0000;}
+    100% {stroke: #5b0000;}
+
+}
+@-moz-keyframes colours {
+    0% {stroke: #5b0000;}
+    50% {stroke: #FF0000;}
+    100% {stroke: #5b0000;}
+
+}
+
+#alert {
+
+}
+
+
 .slot.sell polygon {
     stroke: #FF0000;
     cursor: pointer;
+
+    -webkit-animation-direction: normal;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: colours;
+    -webkit-animation-timing-function: ease;
+    -moz-animation-direction: normal;
+    -moz-animation-duration: 1s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: colours;
+    -moz-animation-timing-function: ease;
+    cursor: not-allowed;
 }
 
 svg {

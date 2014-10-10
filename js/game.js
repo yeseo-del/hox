@@ -427,7 +427,7 @@ angular.module('HexaClicker', [])
         }
 
         $scope.changeLevel = function(value) {
-            if(value == -1 && $scope.currentLevel == 0 || value == 1 && $scope.currentLevel == $scope.maxLevel) {
+            if(value == -1 && $scope.currentLevel == 1 || value == 1 && $scope.currentLevel == $scope.maxLevel) {
                 return;
             }
 
