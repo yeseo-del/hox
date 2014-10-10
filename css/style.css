@@ -75,9 +75,40 @@ body {
     stroke: #FF0000;
 }
 
+#alert {color: #39f !important;}
+@-webkit-keyframes colours {
+    0% {stroke: #5b0000;}
+    50% {stroke: #FF0000;}
+    100% {stroke: #5b0000;}
+
+}
+@-moz-keyframes colours {
+    0% {stroke: #5b0000;}
+    50% {stroke: #FF0000;}
+    100% {stroke: #5b0000;}
+
+}
+
+#alert {
+
+}
+
+
 .slot.sell polygon {
     stroke: #FF0000;
     cursor: pointer;
+
+    -webkit-animation-direction: normal;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: colours;
+    -webkit-animation-timing-function: ease;
+    -moz-animation-direction: normal;
+    -moz-animation-duration: 1s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: colours;
+    -moz-animation-timing-function: ease;
+    cursor: not-allowed;
 }
 
 svg {
@@ -180,6 +211,63 @@ svg {
     font-family: "SourceCodePro-Semibold";
 }
 
+.kill-box {
+    margin-top: 5px;
+    width: 280px;
+    height: 20px;
+    text-align: center;
+    position: relative;
+    background-color: #005050;
+}
+
+.kill-box .progress {
+    height: 20px;
+    background-color: #00ffff;
+}
+
+.kill-box-label {
+    width: 280px;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: 17px;
+    font-family: "SourceCodePro-Semibold";
+    line-height: 20px;
+}
+
+.level-box .progress.animation {
+    -webkit-transition: width 0.1s linear; /* For Safari 3.1 to 6.0 */
+    transition: width 0.1s linear;
+}
+
+.boss-timer-box {
+    margin-top: 5px;
+    width: 280px;
+    height: 20px;
+    text-align: center;
+    position: relative;
+    background-color: #005050;
+}
+
+.boss-timer-box .progress {
+    height: 20px;
+    background-color: #00ffff;
+}
+
+.boss-timer-box-label {
+    width: 280px;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: 17px;
+    font-family: "SourceCodePro-Semibold";
+    line-height: 20px;
+}
+
 .purchase-button.inactive {
     opacity: 0.5;
 }
@@ -198,16 +286,16 @@ svg {
 }
 
 .container {
-    width: 1312px;
+    width: 1330px;
     margin-left: auto;
     margin-right: auto;
 }
 
 div.grid-container {
-    border: 1px solid black;
     width: 700px;
     height: 700px;
     padding: 5px;
+    padding-left: 25px;
     float: left;
 }
 
@@ -298,6 +386,41 @@ div.grid-container {
     opacity: 0.6;
 }
 
+.farm-button {
+    float: left;
+    height: 28px;
+    width: 200px;
+    cursor: pointer;
+    text-align: center;
+    font-family: "SourceCodePro-Semibold";
+    line-height: 28px;
+    background-color: #ea8a00;
+    margin-top: 8px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.farm-button:hover {
+    opacity: 0.9;
+}
+
+.level-step-button {
+    margin-top: 8px;
+    float: left;
+    width: 40px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.purchase-list {
+    width: 310px;
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .help-box {
     float: left;
     margin-top: 20px;
@@ -312,4 +435,8 @@ div.grid-container {
 .preview {
     color: #7fea7f;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.preview.insufficient {
+    color: #FF0000;
 }

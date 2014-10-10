@@ -1,4 +1,4 @@
-<div class="purchase-button" ng-class="{ inactive: $parent.credit < hexaData.price, preview: preview }" ng-click="buyHexa(hexaData)">
+<div class="purchase-button" ng-class="{ inactive: $parent.credit < hexaData.price, preview: preview, insufficient: $parent.credit < $parent.$parent.calcByLevel(hexaData.upgrade, hexaData.upgradeIncrease, $parent.$parent.hexaLevels[hexaData.id]) }" ng-click="buyHexa(hexaData)">
     <div ng-if="hexaData.type == 1">
         <div class="color-box" ng-style="{'background-color': hexaData.color}" ng-click="upgradeHexa(hexaData.id); $event.stopPropagation();"
                 ng-mouseenter="setPreview(true)" ng-mouseleave="setPreview(false)">
