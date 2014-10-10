@@ -335,13 +335,16 @@ angular.module('HexaClicker', [])
                 var hp = $scope.getCurrentLevel().hp;
                 var credit = $scope.getCurrentLevel().credit;
                 var elapsedTime = (Date.now() - timestamp) / 1000;
-                var dps = $scope.getDPS();
+                var dps = $scope.getPureDPS();
 
                 var dCredit = Math.floor(elapsedTime * dps / hp) * credit;
-                console.log('elapsedTime: ', elapsedTime, " kills: ",Math.floor(elapsedTime * dps / hp));
-                console.log("Offline credit earned: ",dCredit);
                 $scope.credit += dCredit;
             }
+
+
+            $interval(function() {
+                window.localStorage.setItem('hexaclickertimestamp', Date.now());
+            }, 1000);
         }
 
         var dpsTimestamp = Date.now();
@@ -374,10 +377,6 @@ angular.module('HexaClicker', [])
 
         $interval(function(){
             $scope.saveGame();
-        }, 30000);
-
-        $interval(function() {
-            window.localStorage.setItem('hexaclickertimestamp', Date.now());
         }, 1000);
 
         $scope.checkAchieved = function() {
@@ -487,6 +486,18 @@ angular.module('HexaClicker', [])
             return sum.toFixed(0);
         }
 
+        $scope.getPureDPS = function() {
+            var sum = 0;
+            $scope.slots.forEach(function(slot) {
+                if(slot.hexa.type == 1) {
+                    var dps = slot.hexa.baseDps * $scope.hexaLevels[slot.hexa.id];
+                    sum += dps;
+                }
+            });
+
+            return sum.toFixed(0);
+        }
+
         $scope.highlight = function(selectedSlot, value) {
             if($scope.slots[selectedSlot].hexa.type == 2) {
                 var affectedSlots = $scope.getAffectedSlots(selectedSlot, $scope.slots[selectedSlot].hexa.effect.type);
@@ -534,7 +545,6 @@ angular.module('HexaClicker', [])
                 saveObj.hexalist.push({achieved: hexa.achieved});
             });
 
-            console.log("SAVE: ", saveObj);
             window.localStorage.setItem("hexaclickersave", JSON.stringify(saveObj));
             window.localStorage.setItem("hexaclickersaveversion", $scope.SAVE_VERSION);
         }
