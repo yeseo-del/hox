@@ -329,8 +329,26 @@ angular.module('HexaClicker', [])
             checkHp();
         }
 
+        $scope.calcOfflineCredit = function() {
+            var timestamp = window.localStorage.getItem('hexaclickertimestamp');
+            if(timestamp != undefined){
+                var hp = $scope.getCurrentLevel().hp;
+                var credit = $scope.getCurrentLevel().credit;
+                var elapsedTime = (Date.now() - timestamp) / 1000;
+                var dps = $scope.getDPS();
+
+                var dCredit = Math.floor(elapsedTime * dps / hp) * credit;
+                console.log('elapsedTime: ', elapsedTime, " kills: ",Math.floor(elapsedTime * dps / hp));
+                console.log("Offline credit earned: ",dCredit);
+                $scope.credit += dCredit;
+            }
+        }
+
+        var dpsTimestamp = Date.now();
+
         $interval(function(){
-            $scope.currentHp += $scope.getDPS() / 10;
+            $scope.currentHp += $scope.getDPS() * ((Date.now() - dpsTimestamp) / 1000);
+            dpsTimestamp = Date.now();
             checkHp();
         }, 100);
 
@@ -357,6 +375,10 @@ angular.module('HexaClicker', [])
         $interval(function(){
             $scope.saveGame();
         }, 30000);
+
+        $interval(function() {
+            window.localStorage.setItem('hexaclickertimestamp', Date.now());
+        }, 1000);
 
         $scope.checkAchieved = function() {
             for(var i = 0; i < $scope.hexalist.length - 1; i++) {
@@ -558,6 +580,7 @@ angular.module('HexaClicker', [])
         }
 
         $scope.loadGame();
+        $scope.calcOfflineCredit();
 
     }])
     .directive('slot', function() {
