@@ -151,6 +151,16 @@
     ga('send', 'pageview');
 
 </script>
+
+<script>
+    //Analytics heartbeat event
+    setInterval(function() {
+        ga('send', 'event', 'HeartBeat', 'HeartBeat');
+    }, 180000);
+
+</script>
+
+
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
