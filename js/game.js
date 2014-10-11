@@ -251,6 +251,9 @@ angular.module('HexaClicker', [])
         $scope.$on('buyHexa', buyHexa);
 
         var upgradeHexa = function(event, id) {
+            if($scope.selectedHexaForPurchase != undefined){
+                return;
+            }
             console.log("upgradeHexa: ", id);
             var cost = $scope.calcByLevel($scope.hexalist[id].upgrade, $scope.hexalist[id].upgradeIncrease, $scope.hexaLevels[id]);
             if($scope.credit >= cost) {
