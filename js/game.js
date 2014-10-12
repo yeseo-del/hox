@@ -422,9 +422,9 @@ angular.module('HexaClicker', [])
                 $scope.startBossTimer();
             }
 
-            if($scope.currentLevel == 30) {
+            if($scope.currentLevel == 31) {
                 $scope.tier = 2;
-            } else if( $scope.currentLevel == 60 ) {
+            } else if( $scope.currentLevel == 61 ) {
                 $scope.tier = 3;
             }
         }
