@@ -1,9 +1,6 @@
 angular.module('HexaClicker', [])
     .controller('GameCtrl', ['$scope', '$interval', function($scope, $interval) {
         $scope.SAVE_VERSION = 2;
-        $scope.credit = 0;
-
-        $scope.bossTimer = 0;
 
         $scope.prettify = function(number) {
             return prettify(number);
@@ -164,88 +161,6 @@ angular.module('HexaClicker', [])
             }
         }
 
-        var checkHp = function() {
-            var level = $scope.getCurrentLevel();
-            if($scope.currentHp >= level.hp) {
-                $scope.credit += level.credit;
-                if(level.boss && $scope.kills < 1 || !level.boss && $scope.kills < 10) {
-                    $scope.kills++;
-                }
-
-                $scope.currentHp = 0;
-
-                if(level.boss && $scope.bossTimer > 0) {
-                    $interval.cancel(bossTimerInterval);
-                    $scope.bossTimer = 0;
-                }
-
-                if((level.boss && $scope.kills >= 1 || !level.boss && $scope.kills >= 10) && !$scope.farmMode) {
-                    $scope.currentLevel += 1;
-                    if($scope.maxLevel < $scope.currentLevel) {
-                        $scope.maxLevel = $scope.currentLevel;
-                    }
-                    if($scope.currentLevel == $scope.maxLevel) {
-                        $scope.kills = 0;
-                    }
-                }
-
-                $scope.checkAchieved();
-            }
-
-            if($scope.getCurrentLevel().boss && $scope.bossTimer == 0) {
-                $scope.startBossTimer();
-            }
-
-            if($scope.currentLevel == 31) {
-                $scope.tier = 2;
-            } else if( $scope.currentLevel == 61 ) {
-                $scope.tier = 3;
-            }
-        }
-
-        $scope.changeLevel = function(value) {
-            if(value == -1 && $scope.currentLevel == 1 || value == 1 && $scope.currentLevel == $scope.maxLevel) {
-                return;
-            }
-
-            if($scope.getCurrentLevel().boss && $scope.bossTimer > 0) {
-                $interval.cancel(bossTimerInterval);
-                $scope.bossTimer = 0;
-            }
-
-            $scope.currentLevel += value;
-            $scope.currentHp = 0;
-
-            if(value == -1) {
-                $scope.kills = 10;
-            }
-
-            if($scope.currentLevel == $scope.maxLevel) {
-                $scope.kills = 0;
-            }
-        }
-
-        var bossTimerInterval = undefined;
-
-        $scope.startBossTimer = function() {
-
-            if($scope.bossTimer == 0) {
-                $scope.bossTimer = 30;
-            }
-
-            bossTimerInterval = $interval(function(){
-                $scope.bossTimer--;
-                if($scope.bossTimer == 0) {
-                    $interval.cancel(bossTimerInterval);
-                    bossTimerInterval = undefined;
-                    $scope.currentLevel--;
-                    $scope.kills = 10;
-                    $scope.currentHp = 0;
-                    $scope.farmMode = true;
-                }
-            }, 1000);
-        }
-
         $scope.highlight = function(selectedSlot, value) {
             if($scope.slots[selectedSlot].hexa.type == 2) {
                 var affectedSlots = $scope.getAffectedSlots(selectedSlot, $scope.slots[selectedSlot].hexa.effect.type);
@@ -254,12 +169,6 @@ angular.module('HexaClicker', [])
                     $scope.slots[slot].highlighted = value;
                 });
             }
-        }
-
-        $scope.upgradeCount = function(){
-            return $scope.slots.filter(function(slot){
-                return slot.hexa.type == 2;
-            }).length;
         }
 
         $scope.resetGame = function() {
@@ -381,15 +290,6 @@ angular.module('HexaClicker', [])
             },
             link: function($scope, element) {
 
-                $scope.calcDps = function(){
-                    var dps = $scope.$parent.slotData.hexa.baseDps * $scope.$parent.$parent.hexaLevels[$scope.$parent.slotData.hexa.id];
-
-                    $scope.$parent.slotData.effects.forEach(function(index) {
-                        dps *= $scope.$parent.$parent.slots[index].hexa.effect.dps;
-                    });
-
-                    return dps.toFixed();
-                }
             }
         };
     })
