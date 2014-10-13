@@ -21,7 +21,14 @@
         <div class="purchase-list">
             <div purchase ng-repeat="hexa in hexalist" hexa-data="hexa" ng-show="hexa.achieved"></div>
         </div>
-        <div class="fb-like" data-href="http://hexaclicker.github.io/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+        <div class="social">
+            <div class="fb-like" data-href="http://hexaclicker.github.io/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true" style="float: left;"></div>
+            <div class="bitcoin" onclick="ga('send', 'event', 'Donate', 'Donate'); window.prompt('My Bitcoin Address','12Y3HawY7GR6UD1naHsNkfbyRWf2ei8t17');">
+                <img src="icon_bitcoin.png" />
+                <div>Donate</div>
+            </div>
+        </div>
+
 
     </div>
 

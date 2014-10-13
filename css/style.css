@@ -440,3 +440,26 @@ div.grid-container {
 .preview.insufficient {
     color: #FF0000;
 }
+
+.social {
+    margin-top: 10px;
+}
+
+.bitcoin {
+    cursor: pointer;
+    float: left;
+    color: white;
+    font-family: "SourceCodePro-Semibold";
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.bitcoin div {
+    float: left;
+}
+
+.bitcoin img {
+    width: 20px;
+    height: 20px;
+    float: left;
+}
