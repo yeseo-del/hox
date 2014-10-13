@@ -3,74 +3,13 @@ angular.module('HexaClicker', [])
         $scope.SAVE_VERSION = 2;
         $scope.credit = 0;
 
-        $scope.maxLevel = 1;
-        $scope.kills = 0;
-        $scope.farmMode = false;
         $scope.bossTimer = 0;
 
         $scope.prettify = function(number) {
             return prettify(number);
         }
 
-        $scope.positionMap = {
-            "-3": {
-                "0": 34,
-                "1": 33,
-                "2": 32,
-                "3": 31
-            },
-            "-2": {
-                "-1": 35,
-                "0": 17,
-                "1": 16,
-                "2": 15,
-                "3": 30
-            },
-            "-1": {
-                "-2": 36,
-                "-1": 18,
-                "0": 6,
-                "1": 5,
-                "2": 14,
-                "3": 29
-            },
-            "0": {
-                "-3": 19,
-                "-2": 7,
-                "-1": 1,
-                "0": 0,
-                "1": 4,
-                "2": 13,
-                "3": 28
-            },
-            "1": {
-                "-3": 20,
-                "-2": 8,
-                "-1": 2,
-                "0": 3,
-                "1": 12,
-                "2": 27
-            },
-            "2": {
-                "-3": 21,
-                "-2": 9,
-                "-1": 10,
-                "0": 11,
-                "1": 26
-            },
-            "3": {
-                "-3": 22,
-                "-2": 23,
-                "-1": 24,
-                "0": 25
-            }
-        }
-
-        $scope.getSlot = function(q, r) {
-            return $scope.positionMap[q][r];
-        }
-
-        $scope.getPosition = function(slot) {
+/*        $scope.getPosition = function(slot) {
             for(var q = -3; q <= 3; q++) {
                 for(var r = -3; r <= 3; r++) {
                     if($scope.positionMap[q][r] == slot) {
@@ -78,160 +17,9 @@ angular.module('HexaClicker', [])
                     }
                 }
             }
-        }
-
-        var EFFECT = {
-            "HORIZONTAL": 1,
-            "AREA": 2
-        }
-
-        var DIRECTION = [
-            { q: 0, r: -1 },
-            { q: 1, r: -1 },
-            { q: 1, r: 0 },
-            { q: 0, r: 1 },
-            { q: -1, r: 1 },
-            { q: -1, r: 0 }
-        ];
-
-        $scope.getAffectedSlots = function(slot, type) {
-            var slots = [];
-            var pos = $scope.getPosition(slot);
-
-            switch (type) {
-                case EFFECT.HORIZONTAL:
-                    for(var i = -3; i <= 3; i++) {
-                        var s = $scope.getSlot(i, pos.r);
-                        if(s != undefined) {
-                            slots.push(s)
-                        }
-                    }
-                    break;
-                case EFFECT.AREA:
-                    DIRECTION.forEach(function(direction) {
-                        var dq = pos.q + direction.q;
-                        var dr = pos.r + direction.r;
-
-                        if(dq <= 3 && dq >= -3 && dr <= 3 && dr >= -3) {
-                            var s = $scope.getSlot( dq, dr );
-                            if(s != undefined) {
-                                slots.push(s);
-                            }
-                        }
-                    });
-                    break;
-            }
-
-            return slots;
-        }
-
-        $scope.currentLevel = 1;
-        $scope.currentHp = 0;
-
-        $scope.tier = 1;
-
-        var EMPTY_SLOT = { id: 0, type: 0, color: "#373737", baseDps: 0, increase: 1.0, price: 0 };
-
-        $scope.hexalist = [
-            { id: 0, type: 1, color: "#ea8a00", baseDps: 5, price: 50, upgrade: 50, upgradeIncrease: 1.07, achieved: true},
-            { id: 1, type: 1, color: "#bae272", baseDps: 22, price: 250, upgrade: 250, upgradeIncrease: 1.07, achieved: false },
-            { id: 2, type: 1, color: "#541a30", baseDps: 74, price: 1e+3, upgrade: 1e+3, upgradeIncrease: 1.07, achieved: false },
-            { id: 3, type: 1, color: "#d9afd7", baseDps: 245, price: 4e+3, upgrade: 4e+3, upgradeIncrease: 1.07, achieved: false },
-            { id: 4, type: 1, color: "#f1d888", baseDps: 976, price: 20e+3, upgrade: 20e+3, upgradeIncrease: 1.07, achieved: false },
-            { id: 5, type: 1, color: "#586fa1", baseDps: 3725, price: 100e+3, upgrade: 100e+3, upgradeIncrease: 1.07, achieved: false },
-            { id: 6, type: 1, color: "#efeae2", baseDps: 10.859e+3, price: 400e+3, upgrade: 400e+3, upgradeIncrease: 1.07, achieved: false },
-            { id: 7, type: 1, color: "#00b0ff", baseDps: 47.143e+3, price: 2.5e+6, upgrade: 2.5e+6, upgradeIncrease: 1.07, achieved: false },
-            { id: 8, type: 1, color: "#84b096", baseDps: 186e+3, price: 15e+6, upgrade: 15e+6, upgradeIncrease: 1.07, achieved: false },
-            { id: 9, type: 1, color: "#FFF79A", baseDps: 782e+3, price: 100e+6, upgrade: 100e+6, upgradeIncrease: 1.07, achieved: false },
-            { id: 10, type: 1, color: "#8882BE", baseDps: 3721e+3, price: 800e+6, upgrade: 800e+6, upgradeIncrease: 1.07, achieved: false },
-            { id: 11, type: 1, color: "#6ECFF6", baseDps: 17010e+3, price: 6.5e+9, upgrade: 6.5e+9, upgradeIncrease: 1.07, achieved: false },
-            { id: 12, type: 1, color: "#F6989D", baseDps: 69480e+3, price: 50e+9, upgrade: 50e+9, upgradeIncrease: 1.07, achieved: false },
-            { id: 13, type: 1, color: "#FDC68A", baseDps: 460e+6, price: 450e+9, upgrade: 450e+9, upgradeIncrease: 1.07, achieved: false },
-            { id: 14, type: 1, color: "#C4DF9B", baseDps: 3e+9, price: 4e+12, upgrade: 4e+12, upgradeIncrease: 1.07, achieved: false },
-            { id: 15, type: 1, color: "#7EA7D8", baseDps: 20e+9, price: 36e+12, upgrade: 36e+12, upgradeIncrease: 1.07, achieved: false },
-            { id: 16, type: 1, color: "#F49AC2", baseDps: 131e+9, price: 320e+12, upgrade: 320e+12, upgradeIncrease: 1.07, achieved: false },
-            { id: 17, type: 1, color: "#F7977A", baseDps: 698e+9, price: 2.7e+15, upgrade: 2.7e+15, upgradeIncrease: 1.07, achieved: false },
-            { id: 18, type: 1, color: "#8493CA", baseDps: 5330e+9, price: 24e+15, upgrade: 24e+15, upgradeIncrease: 1.07, achieved: false },
-            { id: 19, type: 1, color: "#82CA9D", baseDps: 490e+12, price: 300e+15, upgrade: 300e+15, upgradeIncrease: 1.07, achieved: false },
-            { id: 20, type: 1, color: "#C69C6E", baseDps: 1086e+12, price: 9e+18, upgrade: 9e+18, upgradeIncrease: 1.07, achieved: false },
-            { id: 21, type: 1, color: "#7A0026", baseDps: 31e+15, price: 350e+18, upgrade: 350e+18, upgradeIncrease: 1.07, achieved: false },
-            { id: 22, type: 1, color: "#8DC73F", baseDps: 917e+15, price: 14e+21, upgrade: 14e+21, upgradeIncrease: 1.07, achieved: false },
-            { id: 23, type: 1, color: "#FFF467", baseDps: 1013e+18, price: 4199e+21, upgrade: 4199e+21, upgradeIncrease: 1.07, achieved: false },
-            { id: 24, type: 1, color: "#00AEEF", baseDps: 74e+21, price: 2100e+24, upgrade: 2100e+24, upgradeIncrease: 1.07, achieved: false }
-        ]
-
-        $scope.upgradeList = [
-            { id: 0, type: 2, color: "#586fa1", price: 1000, achieved: true, cooldown: 10, effect: { type: EFFECT.HORIZONTAL, dps: 2 }, description: "Horiz. DPS" },
-            { id: 1, type: 2, color: "#ea8a00", price: 2000, achieved: true, cooldown: 5, effect: { type: EFFECT.AREA, dps: 2 }, description: "Area DPS" }
-        ]
-
-
-        $scope.hexaLevels = [
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-        ]
-
-        $scope.calcByLevel = function(base, increase, level){
-            return (base * Math.pow(increase, level-1)).toFixed();
-        }
-
-        $scope.slots = [
-            {slot: 0, empty: false, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
-            {slot: 1, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
-            {slot: 2, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
-            {slot: 3, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
-            {slot: 4, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
-            {slot: 5, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
-            {slot: 6, empty: true, hexa: EMPTY_SLOT, tier: 1, cooldown: -1, effects: [], highlighted: false},
-            {slot: 7, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 8, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 9, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 10, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 11, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 12, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 13, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 14, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 15, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 16, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 17, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 18, empty: true, hexa: EMPTY_SLOT, tier: 2, cooldown: -1, effects: [], highlighted: false},
-            {slot: 19, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 20, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 21, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 22, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 23, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 24, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 25, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 26, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 27, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 28, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 29, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 30, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 31, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 32, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 33, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 34, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 35, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false},
-            {slot: 36, empty: true, hexa: EMPTY_SLOT, tier: 3, cooldown: -1, effects: [], highlighted: false}
-        ];
-
-        $scope.maxUpgrades = function() {
-            switch ($scope.tier) {
-                case 1:
-                    return 1;
-                case 2:
-                    return 3;
-                case 3:
-                    return 6;
-            }
-        }
+        }*/
 
         $scope.selectedHexaForPurchase = undefined;
-
-        $scope.emptySlotCount = function() {
-            return emptySlots = $scope.slots.filter(function(slot){
-                return slot.tier <= $scope.tier && slot.empty;
-            }).length;
-        }
 
         var buyHexa = function(event, hexa) {
 
@@ -311,20 +99,6 @@ angular.module('HexaClicker', [])
         $scope.sellHexa = function(state) {
             $scope.sellActive = state;
             $scope.$broadcast('sell', state);
-        }
-
-        $scope.getCurrentLevel = function() {
-            var hp = ($scope.currentLevel % 5 == 0
-                ? 10 * Math.pow( 1.6, $scope.currentLevel - 1) * 10
-                : 10 * Math.pow( 1.6, $scope.currentLevel - 1)
-            );
-
-            var credit = ($scope.currentLevel % 5 == 0
-                ? (10 * Math.pow( 1.6, $scope.currentLevel - 1) * 10) / 15 * 2
-                : 10 * Math.pow( 1.6, $scope.currentLevel - 1) / 15 * 2
-            );
-
-            return { lvl: $scope.currentLevel, hp: hp, credit: credit, boss: $scope.currentLevel % 5 == 0 }
         }
 
         $scope.clickerHexa = function() {
@@ -470,35 +244,6 @@ angular.module('HexaClicker', [])
                     $scope.farmMode = true;
                 }
             }, 1000);
-        }
-
-        $scope.getDPS = function() {
-            var sum = 0;
-            $scope.slots.forEach(function(slot) {
-                if(slot.hexa.type == 1) {
-                    var dps = slot.hexa.baseDps * $scope.hexaLevels[slot.hexa.id];
-
-                    slot.effects.forEach(function(index) {
-                        dps *= $scope.slots[index].hexa.effect.dps;
-                    });
-
-                    sum += dps;
-                }
-            });
-
-            return sum.toFixed(0);
-        }
-
-        $scope.getPureDPS = function() {
-            var sum = 0;
-            $scope.slots.forEach(function(slot) {
-                if(slot.hexa.type == 1) {
-                    var dps = slot.hexa.baseDps * $scope.hexaLevels[slot.hexa.id];
-                    sum += dps;
-                }
-            });
-
-            return sum.toFixed(0);
         }
 
         $scope.highlight = function(selectedSlot, value) {
