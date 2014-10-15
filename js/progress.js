@@ -1,49 +1,143 @@
 angular.module('HexaClicker')
-    .service('Progress', function(){
-        var currentLevel = undefined;
-        var maxLevel = 1;
-
-        var farmMode = false;
-
-        this.setLevel = function(level) {
-            currentLevel = this.getLevel(level);
+    .service('Progress', ['$rootScope', '$interval', function($rootScope, $interval){
+        Level.DIRECTION = {
+            "FORWARD": 1,
+            "BACKWARD": -1
         }
 
-        this.changeLevel = function(direction) {
-            var newLevel = currentLevel.level + direction;
+        Level.KILL = {
+            "NORMAL": 10,
+            "BOSS": 1
+        }
 
-            if(newLevel <= maxLevel) {
-                this.setLevel(currentLevel.level + direction);
-                this.currentLevel.on('kill', onKill);
-                this.currentLevel.on('bossFailed', onBossFailed);
+        this.getProgress = function() {
+            return new Progress();
+        }
+
+        function Progress() {
+            this.currentLevel = undefined;
+            this.maxLevel = 1;
+
+            this.progressMode = true;
+
+            this.setLevel = function(level) {
+                this.currentLevel = this.getLevel(level);
+                this.currentLevel.onKill = this.onKill;
+                this.currentLevel.onBossFailed = this.onBossFailed;
+            }
+
+            this.changeLevel = function(direction) {
+                var newLevel = this.currentLevel.level + direction;
+                console.log("Change Level: ", newLevel);
+
+                if(newLevel > 0 && newLevel <= this.maxLevel) {
+                    this.setLevel(this.currentLevel.level + direction);
+                    console.log('MaxLevel: ', this.maxLevel, " NewLevel: ", newLevel);
+                    var kills = this.maxLevel > newLevel ? 10 : 0;
+                    this.currentLevel.kills = this.maxLevel > newLevel ? 10 : 0;
+                }
+            }
+
+            this.enoughToProgress = function(kills) {
+                return (this.currentLevel.boss && kills == Level.KILL.BOSS)
+                    || (!this.currentLevel.boss && kills == Level.KILL.NORMAL);
+            }
+
+            var me = this;
+
+            this.onKill = function(kills) {
+                console.log("Kill. ", kills);
+                $rootScope.$broadcast('kill');
+                if(me.enoughToProgress(kills)) {
+                    if(me.currentLevel.boss) {
+                        me.currentLevel.bossTimer.cancel();
+                    }
+
+                    if(me.maxLevel == me.currentLevel.level) {
+                        me.maxLevel += 1;
+                    }
+                    if(me.progressMode) {
+                        me.changeLevel(Level.DIRECTION.FORWARD);
+                    }
+                }
+            }
+
+            this.onBossFailed = function() {
+                console.log("Boss Failed!");
+                me.changeLevel(Level.DIRECTION.BACKWARD);
+                me.progressMode = false;
+            }
+
+            this.getLevel = function(level) {
+                return new Level(level);
             }
         }
 
-        var enoughToProgress = function(kills) {
-            return (this.currentLevel.boss && kills == Level.KILL.BOSS)
-                || (!this.currentLevel.boss && kills == Level.KILL.NORMAL);
-        }
+        function Level(level) {
+            var me = this;
 
-        var onKill = function(kills) {
-            if(enoughToProgress(kills)) {
-                if(this.currentLevel.boss) {
-                    this.currentLevel.bossTimer.cancel();
+            this.level = level;
+
+            this.currentHp = 0;
+
+            this.onKill = undefined;
+            this.onBossFailed = undefined;
+
+            this.kills = 0;
+
+            this.hp = (level % 5 == 0
+                ? 10 * Math.pow( 1.6, level - 1) * 10
+                : 10 * Math.pow( 1.6, level - 1)
+                );
+
+            this.credit = (level % 5 == 0
+                ? (10 * Math.pow( 1.6, level - 1) * 10) / 15 * 2
+                : 10 * Math.pow( 1.6, level - 1) / 15 * 2
+                );
+
+            this.boss = level % 5 == 0;
+
+            if(this.boss) {
+                var onFail = function() {
+                    me.currentHp = 0;
+                    me.onBossFailed();
                 }
 
-                this.changeLevel(Level.DIRECTION.FORWARD);
+                this.bossTimer = new BossTimer(30, onFail);
+            }
+
+            this.dealDamage = function(damage) {
+                console.log("Deal dmg: ", damage);
+                var newHp = this.currentHp + damage;
+
+                if(newHp >= this.hp) {
+                    this.currentHp = 0;
+                    if(this.kills < 10) {
+                        this.kills++;
+                    }
+                    this.onKill(this.kills);
+                } else {
+                    this.currentHp = newHp;
+                }
             }
         }
 
-        var onBossFailed = function() {
-            if(!this.farmMode) {
-                this.changeLevel(Level.DIRECTION.BACKWARD);
-                this.farmMode = false;
+        function BossTimer(time, onFail){
+            this.time = time;
+
+            var me = this;
+            this.timer = $interval(function(){
+                me.time -= 1;
+                console.log("BossTimer tick", me.time);
+                if(me.time == 0) {
+                    me.time = time;
+                    me.cancel();
+                    onFail();
+                }
+            }, 1000);
+
+            this.cancel = function(){
+                $interval.cancel(this.timer);
             }
         }
-
-        this.getLevel = function(level) {
-            return new Level(level);
-        }
-
-
-    });
+    }]);

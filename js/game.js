@@ -1,5 +1,52 @@
 angular.module('HexaClicker', [])
-    .controller('GameCtrl', ['$scope', '$interval', function($scope, $interval) {
+    .controller('GameCtrl', ['$scope', '$interval', 'Progress', 'Grid', 'Data', 'Status', function($scope, $interval, Progress, Grid, Data, Status) {
+
+        $scope.Grid = Grid.getGrid();
+
+        $scope.Progress = Progress.getProgress();
+
+        $scope.Progress.setLevel(1);
+
+        $scope.Status = Status.getStatus();
+
+        $scope.Data = Data;
+
+        $scope.selectedHexaForPurchase = undefined;
+
+        $scope.click = function() {
+            $scope.Progress.currentLevel.dealDamage(50 + $scope.Grid.getDPS() * 0.1);
+        }
+
+        $scope.toggleProgress = function() {
+            $scope.Progress.progressMode = !$scope.Progress.progressMode;
+        }
+
+        $scope.$on('kill', function(event) {
+            console.log('onKill');
+            $scope.Status.addCredit($scope.Progress.currentLevel.credit);
+
+            if($scope.Progress.currentLevel.boss){
+                $scope.Status.addPower(1);
+            }
+        });
+
+        $scope.$on('purchase', function(event, hexa) {
+            console.log('onPurchase', hexa);
+            $scope.selectedHexaForPurchase = hexa;
+        });
+
+        //DPS
+        var dpsTimestamp = Date.now();
+        var dpsInterval = $interval(function(){
+            $scope.Progress.currentLevel.dealDamage($scope.Grid.getDPS() * ((Date.now() - dpsTimestamp) / 1000));
+            dpsTimestamp = Date.now();
+        },100);
+
+        ///////////////////////////////------------------------------------------------------------------------------
+        // INIT TESTDATA
+
+        ////////////////////////////-----------------------------------------------------------------------------
+
         $scope.SAVE_VERSION = 2;
 
         $scope.prettify = function(number) {
@@ -15,93 +62,6 @@ angular.module('HexaClicker', [])
                 }
             }
         }*/
-
-        $scope.selectedHexaForPurchase = undefined;
-
-        var buyHexa = function(event, hexa) {
-
-            if(hexa.type == 2 && $scope.upgradeCount() >= $scope.maxUpgrades()) {
-                return;
-            }
-
-            if($scope.credit >= hexa.price && emptySlots > 0) {
-                $scope.selectedHexaForPurchase = hexa;
-
-                $scope.$broadcast('purchase', true);
-
-                console.log("purchaseActive");
-            }
-        };
-
-        $scope.$on('buyHexa', buyHexa);
-
-        var upgradeHexa = function(event, id) {
-            if($scope.selectedHexaForPurchase != undefined){
-                return;
-            }
-            console.log("upgradeHexa: ", id);
-            var cost = $scope.calcByLevel($scope.hexalist[id].upgrade, $scope.hexalist[id].upgradeIncrease, $scope.hexaLevels[id]);
-            if($scope.credit >= cost) {
-                $scope.credit -= cost;
-                $scope.hexaLevels[id] += 1;
-            }
-        };
-
-        $scope.$on('upgradeHexa', upgradeHexa);
-
-        var selectSlotForPurchase = function(event, id) {
-            $scope.slots[id].hexa = $scope.selectedHexaForPurchase;
-            $scope.slots[id].empty = false;
-
-            $scope.credit -= $scope.selectedHexaForPurchase.price;
-
-            $scope.selectedHexaForPurchase = undefined;
-
-            $scope.$broadcast('purchase', false);
-        }
-
-        $scope.$on('slotSelected', selectSlotForPurchase);
-
-        var selectSlotForSell = function(event, id) {
-            if($scope.slots[id].hexa.type == 2) {
-                $scope.highlight(id, false);
-                var affectedSlots = $scope.getAffectedSlots(id, $scope.slots[id].hexa.effect.type);
-                affectedSlots.forEach(function(affectedSlot){
-                    var i = $scope.slots[affectedSlot].effects.indexOf(id);
-                    if(i != -1) {
-                        $scope.slots[affectedSlot].effects.splice(i, 1);
-                    }
-                });
-            }
-
-            $scope.slots[id].hexa = EMPTY_SLOT;
-            $scope.slots[id].empty = true;
-            $scope.slots[id].cooldown = -1;
-            $scope.slots[id].effects = [];
-        }
-
-        $scope.$on('slotSelectedForSell', selectSlotForSell);
-
-        $scope.hexaClick = function(index) {
-            if($scope.purchaseActive) {
-                $scope.slots[index] = $scope.selectedHexaForPurchase;
-                $scope.credit -= $scope.getHexa($scope.selectedHexaForPurchase).price;
-                $scope.purchaseActive = false;
-                console.log($scope.slots);
-            }
-        }
-
-        $scope.sellActive = false;
-
-        $scope.sellHexa = function(state) {
-            $scope.sellActive = state;
-            $scope.$broadcast('sell', state);
-        }
-
-        $scope.clickerHexa = function() {
-            $scope.currentHp += 5 + $scope.getDPS() * 0.1;
-            checkHp();
-        }
 
         $scope.calcOfflineCredit = function() {
             var timestamp = window.localStorage.getItem('hexaclickertimestamp');
@@ -121,14 +81,7 @@ angular.module('HexaClicker', [])
             }, 1000);
         }
 
-        var dpsTimestamp = Date.now();
-
-        $interval(function(){
-            $scope.currentHp += $scope.getDPS() * ((Date.now() - dpsTimestamp) / 1000);
-            dpsTimestamp = Date.now();
-            checkHp();
-        }, 100);
-
+        /*
         $interval(function(){
             $scope.slots.forEach(function(slot) {
                 if(slot.cooldown > 0) {
@@ -151,15 +104,7 @@ angular.module('HexaClicker', [])
 
         $interval(function(){
             $scope.saveGame();
-        }, 1000);
-
-        $scope.checkAchieved = function() {
-            for(var i = 0; i < $scope.hexalist.length - 1; i++) {
-                if($scope.credit >= $scope.hexalist[i].price) {
-                    $scope.hexalist[i+1].achieved = true;
-                }
-            }
-        }
+        }, 1000);*/
 
         $scope.highlight = function(selectedSlot, value) {
             if($scope.slots[selectedSlot].hexa.type == 2) {
@@ -246,114 +191,11 @@ angular.module('HexaClicker', [])
             }
         }
 
-        $scope.loadGame();
-        $scope.calcOfflineCredit();
+        //$scope.loadGame();
+        //$scope.calcOfflineCredit();
 
     }])
-    .directive('slot', function() {
-        return {
-            templateUrl: 'slot.html',
-            scope: {
-                slotData: '='
-            },
-            link: function($scope, element) {
-                $scope.purchaseActive = false;
-                $scope.sellActive = false;
 
-                $scope.$on('purchase', function(event, state){
-                    $scope.purchaseActive = state;
-                });
-
-                $scope.$on('sell', function(event, state){
-                    $scope.sellActive = state;
-                });
-
-                $scope.selectSlotForSell = function(slot) {
-                    if($scope.sellActive) {
-                        $scope.$emit('slotSelectedForSell', slot);
-                    }
-                }
-
-                $scope.selectSlot = function(slot) {
-                    if($scope.purchaseActive) {
-                        $scope.$emit('slotSelected', slot);
-                    }
-                }
-            }
-        };
-    })
-
-    .directive('hexa', function(){
-        return {
-            templateUrl: 'hexa.html',
-            scope: {
-            },
-            link: function($scope, element) {
-
-            }
-        };
-    })
-
-    .directive('upgrade', function(){
-        return {
-            templateUrl: 'upgrade.html',
-            scope: {
-            },
-            link: function($scope, element) {
-                $scope.activate = function() {
-                    if($scope.$parent.slotData.cooldown <= 0) {
-                        $scope.$parent.slotData.cooldown = $scope.$parent.slotData.hexa.cooldown;
-
-                        var affectedSlots = $scope.$parent.$parent.getAffectedSlots($scope.$parent.slotData.slot, $scope.$parent.slotData.hexa.effect.type);
-                        affectedSlots.forEach(function(slot) {
-                            $scope.$parent.$parent.slots[slot].effects.push($scope.$parent.slotData.slot);
-                        });
-                    }
-                }
-            }
-        };
-    })
-
-    .directive('clicker', function() {
-        return {
-            templateUrl: 'clicker.html'
-        };
-    })
-    .directive('purchase', function() {
-        return {
-            templateUrl: 'purchase.html',
-            scope: {
-                hexaData: '='
-            },
-            link: function($scope, element) {
-
-                $scope.preview = false;
-
-                $scope.setPreview = function(value) {
-                    $scope.preview = value;
-                }
-
-                $scope.buyHexa = function(id) {
-                    if($scope.$parent.emptySlotCount() > 0) {
-                        $scope.$emit('buyHexa', id);
-                    }
-                }
-
-                $scope.upgradeHexa = function(id) {
-                    console.log('click upgradeHexa');
-                    $scope.$emit('upgradeHexa', id);
-                }
-
-                $scope.calcUpgrade = function(base, increase, level){
-                    return (base * Math.pow(increase, level-1)).toFixed();
-                }
-
-                $scope.calcDps = function(base, level){
-                    return (base * level).toFixed();
-                }
-            }
-        };
-    })
     .filter('prettify', function(){
         return function(input) {
             return prettify(input);

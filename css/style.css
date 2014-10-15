@@ -272,6 +272,10 @@ svg {
     opacity: 0.5;
 }
 
+.purchase-button.selected {
+    border: 1px solid #7fea7f;
+}
+
 
 .hex-list {
     width: 300px;

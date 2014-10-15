@@ -1,6 +1,6 @@
 angular.module('HexaClicker')
     .service('Data', function(){
-        var hexas = [
+        this.hexas = [
             //DPS HEXAS
             //         ID   Color       Price      BaseUpgr   BaseDPS
             new DpsHexa(0,  "#ea8a00",  50,          50,         5),
@@ -35,8 +35,20 @@ angular.module('HexaClicker')
         ];
 
         this.getHexa = function(id) {
-            return hexas.filter(function(hexa) {
+            return this.hexas.filter(function(hexa) {
                 return hexa.id == id;
             })[0];
+        }
+
+        this.getHexas = function(type) {
+            return this.hexas.filter(function(hexa) {
+                switch(type) {
+                    case Hexa.TYPE.DPS:
+                        return hexa instanceof DpsHexa;
+                        break;
+                    default:
+                        return false;
+                }
+            });
         }
     });

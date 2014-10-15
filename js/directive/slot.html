@@ -1,0 +1,24 @@
+<div class="slot">
+
+    <div ng-show="!slot.hexaEntity && !selectedHexaForPurchase">
+        <svg viewBox="0 0 177 204">
+            <polygon points="2,152 2,52 88.6,2 175.2,52 175.2,152 88.6,202" style="fill: #373737"/>
+        </svg>
+    </div>
+
+    <div ng-show="!slot.hexaEntity && selectedHexaForPurchase" ng-click="buy()">
+        <svg viewBox="0 0 177 204">
+            <polygon points="2,152 2,52 88.6,2 175.2,52 175.2,152 88.6,202" style="fill: #777777"/>
+        </svg>
+    </div>
+
+    <div ng-show="slot.hexaEntity">
+        <svg viewBox="0 0 177 204">
+            <polygon points="2,152 2,52 88.6,2 175.2,52 175.2,152 88.6,202" style="fill: {{ slot.hexaEntity.hexa.color }}"/>
+        </svg>
+        <div class="label" ng-class="{ affected: slot.effects.length > 0 }">
+            {{ slot.hexaEntity.getDPS() | prettify }}
+        </div>
+    </div>
+
+</div>

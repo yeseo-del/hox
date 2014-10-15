@@ -104,8 +104,8 @@ function CooldownStatus(duration, cooldown) {
 function HexaEntity(hexa) {
     this.hexa = hexa;
     this.level = 1;
-}
 
-HexaEntity.prototype.getDps = function() {
-    return this.hexa.calcDps(this.level);
+    this.getDPS = function() {
+        return this.hexa.calcDps(this.level);
+    }
 }
