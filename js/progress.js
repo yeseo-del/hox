@@ -32,6 +32,7 @@ angular.module('HexaClicker')
 
                 if(newLevel > 0 && newLevel <= this.maxLevel) {
                     this.setLevel(this.currentLevel.level + direction);
+                    $rootScope.$broadcast('changelevel', this.currentLevel.level);
                     console.log('MaxLevel: ', this.maxLevel, " NewLevel: ", newLevel);
                     var kills = this.maxLevel > newLevel ? 10 : 0;
                     this.currentLevel.kills = this.maxLevel > newLevel ? 10 : 0;
@@ -97,17 +98,24 @@ angular.module('HexaClicker')
 
             this.boss = level % 5 == 0;
 
-            if(this.boss) {
+            this.startBossTimer = function(time) {
+                if(this.bossTimer) {
+                    this.bossTimer.cancel();
+                    this.bossTimer = undefined;
+                }
                 var onFail = function() {
                     me.currentHp = 0;
                     me.onBossFailed();
                 }
+                this.bossTimer = new BossTimer(time, onFail);
+            }
 
-                this.bossTimer = new BossTimer(30, onFail);
+            if(this.boss) {
+                this.startBossTimer(30);
             }
 
             this.dealDamage = function(damage) {
-                console.log("Deal dmg: ", damage);
+                //console.log("Deal dmg: ", damage);
                 var newHp = this.currentHp + damage;
 
                 if(newHp >= this.hp) {

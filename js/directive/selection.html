@@ -1,0 +1,25 @@
+<div class="selection-box" ng-if="selectedSlot.hexaEntity" style="color: white">
+
+    <!-- DPS -->
+    <div ng-if="selectedSlot.hexaEntity.hexa.type == 1">
+        <div class="color-box" ng-style="{'background-color': selectedSlot.hexaEntity.hexa.color}">
+            {{ selectedSlot.hexaEntity.level }}
+        </div>
+        <div>Nextdps: {{ nextDps() }}</div>
+        <button ng-click="upgrade()" ng-disabled="!canUpgrade()">Upgrade {{ selectedSlot.hexaEntity.calcUpgrade() }}</button>
+        <button ng-click="sell()">Sell {{ selectedSlot.hexaEntity.sellPrice() }}</button>
+        <div>Effects:</div>
+    </div>
+
+    <!-- UTILITY -->
+    <div ng-if="selectedSlot.hexaEntity.hexa.type == 2">
+        <div class="color-box" ng-style="{'background-color': selectedSlot.hexaEntity.hexa.color}">
+            {{ selectedSlot.hexaEntity.level }}
+        </div>
+        <button ng-click="upgrade()" ng-disabled="!canUpgrade()">Upgrade {{ selectedSlot.hexaEntity.calcUpgrade() }}</button>
+        <button ng-click="sell()">Sell {{ selectedSlot.hexaEntity.sellPrice() }}</button>
+        <button ng-if="selectedSlot.hexaEntity.hexa.active" ng-click="activate()" ng-disabled="selectedSlot.hexaEntity.cooldown > 0">Activate</button>
+        <div>Description: {{ selectedSlot.hexaEntity.hexa.description }}</div>
+    </div>
+
+</div>

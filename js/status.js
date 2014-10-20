@@ -7,15 +7,13 @@ angular.module('HexaClicker')
             this.allCredit = 0;
             this.credit = 0;
             this.utility = 1;
-            this.power = 1;
+            this.tier = 1;
+
+            this.achievedHexas = [0, 25, 26, 27];
 
             this.addCredit = function(credit) {
                 this.credit += credit;
                 this.allCredit += credit;
-            }
-
-            this.addPower = function(power) {
-                this.power += power;
             }
         }
 

@@ -4,14 +4,24 @@ angular.module('HexaClicker')
             templateUrl: 'js/directive/slot.html',
             scope: true,
             link: function(scope, element, attrs) {
-                scope.slot = scope.Grid.getSlot(attrs.slotId);
+
+                scope.slot = scope.Grid.getGrid().getSlot(attrs.slotId);
+
+                scope.$on('gridchange', function(event) {
+                    scope.slot = scope.Grid.getGrid().getSlot(attrs.slotId);
+                });
+
+                scope.select = function() {
+                    scope.selectSlot(scope.slot);
+                }
 
                 scope.buy = function() {
-                    if(scope.selectedHexaForPurchase.price <= scope.Status.credit && scope.Status.power > 0) {
-                        scope.slot.setHexaEntity(new HexaEntity(scope.selectedHexaForPurchase));
-                        scope.Status.credit -= scope.selectedHexaForPurchase.price;
-                        scope.Status.power -= 1;
-                    }
+                    scope.buyHexa(scope.slot);
+                }
+
+                scope.isHighlighted = function() {
+                    return scope.highlighted.indexOf(scope.slot.id) != -1
+                        && (scope.slot.hexaEntity == undefined || scope.slot.hexaEntity.hexa.type == 1 );
                 }
             }
         };

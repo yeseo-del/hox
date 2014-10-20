@@ -1,5 +1,9 @@
 angular.module('HexaClicker')
-    .service('Grid', function(){
+    .service('Grid', ['$rootScope', function($rootScope){
+
+        this.grids = [];
+        this.currentGrid = 0;
+
         var POSITIONMAP_DEFAULT = {
             "-3": {
                 "0": 34,
@@ -54,8 +58,23 @@ angular.module('HexaClicker')
             }
         }
 
+        this.grids.push(new Grid());
+
         this.getGrid = function() {
-            return new Grid();
+            return this.grids[this.currentGrid];
+        }
+
+        this.setGrid = function(index) {
+            this.currentGrid = index;
+            $rootScope.$broadcast('gridchange');
+        }
+
+        this.getDPS = function(withEffects) {
+            var sum = 0;
+            this.grids.forEach(function(grid) {
+                sum += grid.getDPS(withEffects);
+            });
+            return Math.floor(sum);
         }
 
         function Slot(id, tier) {
@@ -68,12 +87,40 @@ angular.module('HexaClicker')
             this.setHexaEntity = function(hexaEntity) {
                 this.hexaEntity = hexaEntity;
             }
+
+            this.getPosition = function() {
+                for(var i = -3; i < 4; i++) {
+                    for(var j = -3; j < 4; j++) {
+                        if(POSITIONMAP_DEFAULT[i][j] != undefined && POSITIONMAP_DEFAULT[i][j] == this.id) {
+                            return {q: i, r: j};
+                        }
+                    }
+                }
+            }
+
+            this.getDPS = function(withEffects) {
+                if(this.hexaEntity == undefined) {
+                    return 0;
+                }
+                var sum = 0;
+                sum += this.hexaEntity.getDPS();
+
+                if(withEffects) {
+                    this.effects.forEach(function(affectingSlot) {
+                        sum *= affectingSlot.hexaEntity.hexa.effect.DPS;
+                    });
+                }
+
+                return sum;
+            }
+
+            this.getAffectedPositions = function() {
+                return this.hexaEntity.hexa.getAffectedPositions(this.getPosition());
+            }
         }
 
         function Grid() {
             this.slots = [];
-
-            this.tier = 1;
 
             var me = this;
             _.range(0,7).forEach(function(num) {
@@ -88,22 +135,13 @@ angular.module('HexaClicker')
                 me.slots.push(new Slot(num, 3));
             });
 
-            var positionMap = POSITIONMAP_DEFAULT;
+            this.positionMap = POSITIONMAP_DEFAULT;
 
             this.getDPS = function(withEffects){
                 var sum = 0;
                 this.slots.forEach(function(slot) {
-                    if(slot.hexaEntity && slot.hexaEntity.hexa instanceof DpsHexa) {
-
-                        var dps = slot.hexaEntity.getDPS();
-
-                        if(withEffects) {
-                            slot.effects.forEach(function(effect) {
-                                dps *= effect.effect.dps;
-                            });
-                        }
-
-                        sum += dps;
+                    if(slot.hexaEntity && slot.hexaEntity.hexa.type == 1){
+                        sum += slot.getDPS(withEffects);
                     }
                 });
 
@@ -122,8 +160,23 @@ angular.module('HexaClicker')
 
             this.emptySlotCount = function() {
                 return this.slots.filter(function(slot){
-                    return slot.tier <= this.tier && slot.hexaEntity == undefined;
+                    return slot.hexaEntity == undefined;
                 }).length;
+            }
+
+            this.getAffectedSlots = function(slot) {
+                var slots = [];
+                if(slot.hexaEntity != undefined && slot.hexaEntity.hexa.getAffectedPositions) {
+                    var affected = slot.getAffectedPositions();
+                    affected.forEach(function(position) {
+                        var affectedSlot = me.getSlotByPos(position);
+                        if(affectedSlot != undefined) {
+                            slots.push(affectedSlot);
+                        }
+                    });
+                }
+
+                return slots;
             }
 
             this.maxUpgrades = function() {
@@ -137,4 +190,4 @@ angular.module('HexaClicker')
                 }
             }
         }
-    });
+    }]);

@@ -67,12 +67,17 @@ body {
     cursor: pointer;
 }
 
+.selected polygon {
+    stroke: #7fea7f;
+    cursor: pointer;
+}
+
 .active polygon:active {
     stroke: #000000;
 }
 
 .highlighted polygon {
-    stroke: #FF0000;
+    stroke: #75f3ff;
 }
 
 #alert {color: #39f !important;}
@@ -169,6 +174,7 @@ svg {
     margin-bottom: 5px;
     color: #FFFFFF;
     cursor: pointer;
+    border: 1px solid black;
 }
 
 .level-box {
@@ -308,7 +314,7 @@ div.grid-container {
 }
 
 
-.purchase-button .color-box {
+.color-box {
     width: 65px;
     height: 65px;
     float: left;
@@ -443,4 +449,13 @@ div.grid-container {
 
 .preview.insufficient {
     color: #FF0000;
+}
+
+.selection-box {
+    width: 280px;
+    height: 100px;
+    outline: 1px solid #7fea7f;
+    float: left;
+    margin-top: 80px;
+    margin-left: 10px;
 }

@@ -30,8 +30,9 @@ angular.module('HexaClicker')
             new DpsHexa(24, "#00AEEF",  2100e+24,    2100e+24,   74e+21),
 
             //UTILITY HEXAS
-            new ActiveUtilityHexa(25, "#586fa1", 1000, 1000, "Horiz. DPS", UtilityHexa.TARGET.HORIZONTAL, {DPS: 2}, 10, 30),
-            new ActiveUtilityHexa(26, "#ea8a00", 2000, 1000, "Area DPS", UtilityHexa.TARGET.AREA, {DPS: 2}, 10, 30)
+            new ActiveUtilityHexa(25, "#586fa1", 1, 1000, "Horiz. DPS", UtilityHexa.TARGET.HORIZONTAL, {DPS: 2}, 10, 30),
+            new ActiveUtilityHexa(26, "#ea8a00", 2, 1000, "Area DPS", UtilityHexa.TARGET.AREA, {DPS: 2}, 10, 30),
+            new PassiveUtilityHexa(27, "#82CA9D", 2, 1000, "Area DPS", UtilityHexa.TARGET.AREA, {DPS: 3})
         ];
 
         this.getHexa = function(id) {
@@ -45,6 +46,9 @@ angular.module('HexaClicker')
                 switch(type) {
                     case Hexa.TYPE.DPS:
                         return hexa instanceof DpsHexa;
+                        break;
+                    case Hexa.TYPE.UTILITY:
+                        return hexa instanceof ActiveUtilityHexa || hexa instanceof PassiveUtilityHexa;
                         break;
                     default:
                         return false;
