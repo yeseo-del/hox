@@ -13,6 +13,10 @@ angular.module('HexaClicker')
                     return scope.selectedSlot.hexaEntity.hexa.calcDps(scope.selectedSlot.hexaEntity.level + 1);
                 }
 
+                scope.dps = function() {
+                    return scope.selectedSlot.hexaEntity.hexa.calcDps(scope.selectedSlot.hexaEntity.level);
+                }
+
                 scope.upgrade = function() {
                     console.log('Upgrade ', scope.selectedSlot.hexaEntity.calcUpgrade());
                     if(scope.canUpgrade()) {

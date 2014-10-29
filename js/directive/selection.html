@@ -1,14 +1,13 @@
 <div class="selection-box" ng-if="selectedSlot.hexaEntity" style="color: white">
-
+    <div class="sell-button" ng-click="sell()">Sell {{ selectedSlot.hexaEntity.sellPrice() | prettify }}</div>
     <!-- DPS -->
     <div ng-if="selectedSlot.hexaEntity.hexa.type == 1">
         <div class="color-box" ng-style="{'background-color': selectedSlot.hexaEntity.hexa.color}">
             {{ selectedSlot.hexaEntity.level }}
         </div>
-        <div>Nextdps: {{ nextDps() }}</div>
-        <button ng-click="upgrade()" ng-disabled="!canUpgrade()">Upgrade {{ selectedSlot.hexaEntity.calcUpgrade() }}</button>
-        <button ng-click="sell()">Sell {{ selectedSlot.hexaEntity.sellPrice() }}</button>
-        <div>Effects:</div>
+        <div class="selection-label">Current DPS: {{ dps() | prettify }}</div>
+        <div class="selection-label">Next lvl DPS: {{ nextDps() | prettify }}</div>
+        <button class="selection-label" ng-click="upgrade()" ng-disabled="!canUpgrade()">Upgrade {{ selectedSlot.hexaEntity.calcUpgrade() | prettify }}</button>
     </div>
 
     <!-- UTILITY -->
@@ -16,10 +15,11 @@
         <div class="color-box" ng-style="{'background-color': selectedSlot.hexaEntity.hexa.color}">
             {{ selectedSlot.hexaEntity.level }}
         </div>
-        <button ng-click="upgrade()" ng-disabled="!canUpgrade()">Upgrade {{ selectedSlot.hexaEntity.calcUpgrade() }}</button>
-        <button ng-click="sell()">Sell {{ selectedSlot.hexaEntity.sellPrice() }}</button>
-        <button ng-if="selectedSlot.hexaEntity.hexa.active" ng-click="activate()" ng-disabled="selectedSlot.hexaEntity.cooldown > 0">Activate</button>
-        <div>Description: {{ selectedSlot.hexaEntity.hexa.description }}</div>
+        <button class="selection-label" ng-if="selectedSlot.hexaEntity.hexa.active" ng-click="activate()" ng-disabled="selectedSlot.hexaEntity.cooldown > 0">
+            <span ng-if="selectedSlot.hexaEntity.cooldown == 0">Activate</span>
+            <span ng-if="selectedSlot.hexaEntity.cooldown > 0">Cooldown {{ selectedSlot.hexaEntity.cooldown }}</span>
+        </button>
+        <div class="selection-label">{{ selectedSlot.hexaEntity.hexa.description }}</div>
     </div>
 
 </div>

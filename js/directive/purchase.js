@@ -5,9 +5,14 @@ angular.module('HexaClicker')
             scope: true,
             link: function(scope, element, attrs) {
                 scope.hexa = scope.Data.getHexa(attrs.hexaId);
+                scope.name = attrs.hexaName;
 
                 scope.ableToPurchase = function() {
-                    return scope.hexa.price <= scope.Status.credit;
+                    if(scope.hexa.type == Hexa.TYPE.DPS) {
+                        return scope.hexa.price <= scope.Status.credit;
+                    } else if(scope.hexa.type == Hexa.TYPE.UTILITY) {
+                        return scope.Status.utility > 0;
+                    }
                 }
 
                 scope.achieved = function() {
@@ -20,7 +25,8 @@ angular.module('HexaClicker')
                         return;
                     }
 
-                    if(scope.hexa.price <= scope.Status.credit) {
+                    if((scope.hexa.type == Hexa.TYPE.DPS && scope.hexa.price <= scope.Status.credit)
+                        || (scope.hexa.type == Hexa.TYPE.UTILITY && scope.Status.utility > 0)) {
                         $rootScope.$broadcast('purchase', scope.hexa);
                     }
                 }

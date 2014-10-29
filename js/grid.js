@@ -60,6 +60,10 @@ angular.module('HexaClicker')
 
         this.grids.push(new Grid());
 
+        this.createGrid = function() {
+            this.grids.push(new Grid());
+        }
+
         this.getGrid = function() {
             return this.grids[this.currentGrid];
         }

@@ -1,6 +1,8 @@
 angular.module('HexaClicker', [])
     .controller('GameCtrl', ['$scope', '$interval', 'Progress', 'Grid', 'Data', 'Status', function($scope, $interval, Progress, Grid, Data, Status) {
 
+        $scope.alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+
         $scope.Grid = Grid;
 
         $scope.Grid.setGrid(0);
@@ -22,24 +24,36 @@ angular.module('HexaClicker', [])
         }
 
         $scope.buyHexa = function(slot) {
-            if($scope.selectedHexaForPurchase.price <= $scope.Status.credit) {
-                slot.setHexaEntity(new HexaEntity($scope.selectedHexaForPurchase));
-                $scope.Status.credit -= $scope.selectedHexaForPurchase.price;
-
-                //Activate passive effect
-                if($scope.selectedHexaForPurchase.type == 2 && !$scope.selectedHexaForPurchase.active) {
-                    $scope.Grid.getGrid().getAffectedSlots(slot).forEach(function(affectedSlot) {
-                        affectedSlot.effects.push(slot);
-                    });
+            if($scope.selectedHexaForPurchase.type == Hexa.TYPE.DPS) {
+                if($scope.selectedHexaForPurchase.price <= $scope.Status.credit) {
+                    slot.setHexaEntity(new HexaEntity($scope.selectedHexaForPurchase));
+                    $scope.Status.credit -= $scope.selectedHexaForPurchase.price;
+                    $scope.canContinuePurchase();
                 }
+            } else if($scope.selectedHexaForPurchase.type == Hexa.TYPE.UTILITY) {
+                if($scope.Status.utility > 0) {
 
-                $scope.canContinuePurchase();
+                    slot.setHexaEntity(new HexaEntity($scope.selectedHexaForPurchase));
+                    $scope.Status.utility -= 1;
+
+                    //Activate passive effect
+                    if($scope.selectedHexaForPurchase.type == 2 && !$scope.selectedHexaForPurchase.active) {
+                        $scope.Grid.getGrid().getAffectedSlots(slot).forEach(function(affectedSlot) {
+                            affectedSlot.effects.push(slot);
+                        });
+                    }
+
+                    $scope.canContinuePurchase();
+                }
             }
         }
 
         $scope.sellSlot = function(slot) {
-            $scope.Status.addCredit(slot.hexaEntity.sellPrice());
-
+            if(slot.hexaEntity.hexa.type == Hexa.TYPE.DPS) {
+                $scope.Status.addCredit(slot.hexaEntity.sellPrice());
+            } else if(slot.hexaEntity.hexa.type == Hexa.TYPE.UTILITY) {
+                $scope.Status.utility += 1;
+            }
 
             removeEffectOfSlot(slot);
 
@@ -48,7 +62,9 @@ angular.module('HexaClicker', [])
 
         var removeEffectOfSlot = function(slot) {
             $scope.Grid.getGrid().getAffectedSlots(slot).forEach(function(affectedSlot) {
+                console.log("affectedSlot: ", affectedSlot);
                 affectedSlot.effects.splice(affectedSlot.effects.indexOf(slot.id), 1);
+                console.log("after: ",affectedSlot);
             });
         }
 
@@ -59,15 +75,17 @@ angular.module('HexaClicker', [])
         }
 
         $scope.activateSlot = function(activatedSlot) {
-            var affected = activatedSlot.getAffectedPositions();
-            affected.forEach(function(position) {
-                var slot = $scope.Grid.getGrid().getSlotByPos(position);
-                if(slot != undefined) {
-                    slot.effects.push(activatedSlot);
-                }
-            });
+            if(activatedSlot.hexaEntity.hexa.active && activatedSlot.hexaEntity.cooldown == 0) {
+                var affected = activatedSlot.getAffectedPositions();
+                affected.forEach(function(position) {
+                    var slot = $scope.Grid.getGrid().getSlotByPos(position);
+                    if(slot != undefined) {
+                        slot.effects.push(activatedSlot);
+                    }
+                });
 
-            activatedSlot.hexaEntity.activateTimers();
+                activatedSlot.hexaEntity.activateTimers();
+            }
         }
 
         $scope.clearHighlight = function() {
@@ -88,7 +106,8 @@ angular.module('HexaClicker', [])
 
         $scope.canContinuePurchase = function() {
             if($scope.Grid.getGrid().emptySlotCount() == 0
-                || $scope.Status.credit < $scope.selectedHexaForPurchase.price) {
+                || ($scope.selectedHexaForPurchase.type == Hexa.TYPE.DPS && $scope.Status.credit < $scope.selectedHexaForPurchase.price)
+                || ($scope.selectedHexaForPurchase.type == Hexa.TYPE.UTILITY && $scope.Status.utility < 1)) {
                 $scope.selectedHexaForPurchase = undefined;
             }
         }
@@ -116,10 +135,10 @@ angular.module('HexaClicker', [])
 
         $scope.$on('changelevel', function(event, level) {
             switch(level) {
-                case 3:
+                case 30:
                     $scope.Status.tier = 2;
                     break;
-                case 5:
+                case 60:
                     $scope.Status.tier = 3;
                     break;
             }
@@ -161,6 +180,7 @@ angular.module('HexaClicker', [])
 
             //------
             saveObj.credit = $scope.Status.credit;
+            saveObj.utility = $scope.Status.utility;
             saveObj.currentLevel = $scope.Progress.currentLevel.level;
             saveObj.maxLevel = $scope.Progress.maxLevel;
             saveObj.kills = $scope.Progress.currentLevel.kills;
@@ -209,6 +229,7 @@ angular.module('HexaClicker', [])
                 console.log("LOAD: ", saveObj);
 
                 $scope.Status.credit = saveObj.credit;
+                $scope.Status.utility = saveObj.utility;
                 $scope.Progress.setLevel(saveObj.currentLevel);
                 $scope.Progress.maxLevel = saveObj.maxLevel;
                 $scope.Progress.currentLevel.kills = saveObj.kills;
@@ -221,8 +242,7 @@ angular.module('HexaClicker', [])
 
                 if(saveObj.grids.length > 1) {
                     for(var i = 0; i < saveObj.grids.length - 1; i++) {
-                        var grid = new Grid();
-                        $scope.Grid.grids.push(grid);
+                        $scope.Grid.createGrid();
                     }
                 }
 
@@ -281,6 +301,38 @@ angular.module('HexaClicker', [])
                 window.localStorage.removeItem("hexaclickersave");
                 window.location.reload();
             }
+        }
+
+        $scope.createGrid = function() {
+            if($scope.Progress.currentLevel.level > 10) {
+                $scope.softReset();
+                $scope.Grid.createGrid();
+            }
+        }
+
+        $scope.softReset = function() {
+            $scope.Status.credit = 0;
+            $scope.Status.utility = 0;
+            $scope.Status.achievedHexas = [0, 25, 26, 27];
+            $scope.Grid.currentGrid = 0;
+
+            $scope.Progress.maxLevel = 1;
+            if($scope.Progress.currentLevel.bossTimer) {
+                $scope.Progress.currentLevel.bossTimer.cancel();
+                $scope.Progress.currentLevel.bossTimer = undefined;
+            }
+
+            $scope.Progress.setLevel(1);
+            $scope.Progress.currentLevel.kills = 0;
+
+            $scope.Grid.grids.forEach(function(grid) {
+                grid.slots.forEach(function(slot) {
+                    slot.hexaEntity = undefined;
+                    slot.cooldown = 0;
+                    slot.duration = 0;
+                    slot.effects = [];
+                });
+            });
         }
 
         $scope.loadGame();

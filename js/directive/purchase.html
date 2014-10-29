@@ -1,6 +1,6 @@
 <div class="purchase-button" ng-click="purchase()" ng-if="achieved()" ng-class="{inactive: !ableToPurchase(), selected: selectedHexaForPurchase == hexa}">
     <div ng-if="hexa.type == 1">
-        <div class="color-box" ng-style="{'background-color': hexa.color}"></div>
+        <div class="color-box" ng-style="{'background-color': hexa.color}">{{ name }}</div>
 
         <div class="stat">
             <i class="fa fa-crosshairs"></i> {{ hexa.baseDps | prettify }} / s
@@ -9,20 +9,11 @@
         <div class="stat">
             <i class="fa fa-angle-double-up"></i> {{ hexa.upgrade | prettify }}
         </div>
-
-        <div class="lvlup"><i class="fa fa-angle-right"></i></div>
     </div>
     <div ng-if="hexa.type == 2">
-        <div class="color-box" ng-style="{'background-color': hexa.color}"></div>
-
-        <div class="stat"><i class="fa fa-dollar"></i> {{ hexa.price | prettify }}</div>
-        <div class="stat">
-            <i class="fa fa-angle-double-up"></i> {{ hexa.upgrade | prettify }}
-        </div>
+        <div class="color-box" ng-style="{'background-color': hexa.color}">{{ name }}</div>
         <div class="stat">
             <i class="fa fa-angle-double-up"></i> {{ hexa.description }}
         </div>
-
-        <div class="lvlup"><i class="fa fa-angle-right"></i></div>
     </div>
 </div>

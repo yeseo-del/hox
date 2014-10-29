@@ -12,17 +12,23 @@
 <div class="container" ng-app="HexaClicker" ng-controller="GameCtrl">
     <div class="hex-list">
         <div class="credit-box">
-            <span class="credit-label">Credit</span><span class="credit-amount">{{ Status.credit | prettify }}</span>
-            <div>Utility: {{ Status.utility }}</div>
+            <div style="width: 190px; float: left; margin-right: 20px">
+                <span class="credit-label"><i class="fa fa-dollar"></i> </span><span class="credit-amount">{{ Status.credit | prettify }} |</span>
+            </div>
+            <div style="width: 50px; float: left">
+                <span class="credit-label"><i class="fa fa-bolt"></i> </span><span class="credit-amount">{{ Status.utility }}</span>
+            </div>
         </div>
-        <button ng-click="selectedPurchaseList = 1">DPS</button>
-        <button ng-click="selectedPurchaseList = 2">Utility</button>
+        <div class="toggle-buttons">
+            <div class="toggle-button" ng-click="selectedPurchaseList = 1" ng-class="{selected: selectedPurchaseList == 1}">DPS</div>
+            <div class="toggle-button" ng-click="selectedPurchaseList = 2" ng-class="{selected: selectedPurchaseList == 2}">Utility</div>
+        </div>
         <div class="purchase-list">
             <div ng-if="selectedPurchaseList == 1">
-                <div purchase ng-repeat="hexa in Data.getHexas(1)" hexa-id="{{ hexa.id }}"></div>
+                <div purchase ng-repeat="hexa in Data.getHexas(1)" hexa-id="{{ hexa.id }}" hexa-name="{{ alphabet[$index] }}"></div>
             </div>
             <div ng-if="selectedPurchaseList == 2">
-                <div purchase ng-repeat="hexa in Data.getHexas(2)" hexa-id="{{ hexa.id }}"></div>
+                <div purchase ng-repeat="hexa in Data.getHexas(2)" hexa-id="{{ hexa.id }}" hexa-name="{{ alphabet[$index] }}"></div>
             </div>
         </div>
         <div class="fb-like" data-href="http://hexaclicker.github.io/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
@@ -94,9 +100,6 @@
             <div slot slot-id="28"></div>
             <div style="clear: both"></div>
         </div>
-        <div class="grid-list">
-            <button ng-repeat="grid in Grid.grids" ng-click="Grid.setGrid($index)">Grid: #{{ $index + 1 }} - DPS: {{ grid.getDPS(true) }}</button>
-        </div>
     </div>
 
     <div class="progress-list">
@@ -106,8 +109,22 @@
 
         <div progress></div>
 
-        <div selection></div>
+        <div class="selection-container">
+            <div class="selection-title">
+                Selected
+            </div>
+            <div selection></div>
+        </div>
 
+        <div class="grid-list">
+            <div class="grid-button" ng-repeat="grid in Grid.grids" ng-click="Grid.setGrid($index)" ng-class="{ selected: Grid.currentGrid == $index}">
+                Grid: #{{ $index + 1 }} - DPS: {{ grid.getDPS(true) }}
+            </div>
+            <div class="grid-button" ng-click="createGrid()">
+                Create New Grid
+            </div>
+            <div style="clear: both"></div>
+        </div>
 
         <div class="help-box">
             <button ng-click="resetGame()">Hard reset</button>

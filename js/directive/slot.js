@@ -11,8 +11,12 @@ angular.module('HexaClicker')
                     scope.slot = scope.Grid.getGrid().getSlot(attrs.slotId);
                 });
 
-                scope.select = function() {
-                    scope.selectSlot(scope.slot);
+                scope.select = function(event) {
+                    if(event.ctrlKey) {
+                        scope.activateSlot(scope.slot);
+                    } else {
+                        scope.selectSlot(scope.slot);
+                    }
                 }
 
                 scope.buy = function() {
