@@ -538,3 +538,26 @@ div.grid-container {
 .toggle-button:hover {
     opacity: 0.9;
 }
+
+.social {
+    margin-top: 10px;
+}
+
+.bitcoin {
+    cursor: pointer;
+    float: left;
+    color: white;
+    font-family: "SourceCodePro-Semibold";
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.bitcoin div {
+    float: left;
+}
+
+.bitcoin img {
+    width: 20px;
+    height: 20px;
+    float: left;
+}
