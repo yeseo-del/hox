@@ -54,20 +54,19 @@ angular.module('HexaClicker')
                 console.log("Kill. ", kills);
                 $rootScope.$broadcast('kill');
 
-                if(!me.progressMode && me.currentLevel.boss) {
-                    me.currentLevel.startBossTimer(30);
-                }
-
                 if(me.enoughToProgress(kills)) {
-                    if(me.currentLevel.boss) {
-                        me.currentLevel.bossTimer.cancel();
-                    }
-
                     if(me.maxLevel == me.currentLevel.level) {
                         me.maxLevel += 1;
                     }
                     if(me.progressMode) {
+                        if(me.currentLevel.boss) {
+                            me.currentLevel.bossTimer.cancel();
+                        }
                         me.changeLevel(Level.DIRECTION.FORWARD);
+                    } else {
+                        if(me.currentLevel.boss) {
+                            me.currentLevel.startBossTimer(30);
+                        }
                     }
                 }
             }
