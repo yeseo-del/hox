@@ -67,12 +67,17 @@ body {
     cursor: pointer;
 }
 
+.selected polygon {
+    stroke: #7fea7f;
+    cursor: pointer;
+}
+
 .active polygon:active {
     stroke: #000000;
 }
 
 .highlighted polygon {
-    stroke: #FF0000;
+    stroke: #75f3ff;
 }
 
 #alert {color: #39f !important;}
@@ -131,7 +136,7 @@ svg {
     background-color: #373737;
     margin-bottom: 5px;
     color: #FFFFFF;
-    font-size: 30px;
+    font-size: 28px;
     line-height: 65px;
     font-family: "SourceCodePro-Semibold";
 }
@@ -169,11 +174,16 @@ svg {
     margin-bottom: 5px;
     color: #FFFFFF;
     cursor: pointer;
+    border: 1px solid black;
+}
+
+.purchase-button:hover {
+    background-color: #4d4d4d;
 }
 
 .level-box {
     width: 280px;
-    height: 65px;
+    height: 110px;
     float: left;
     margin-left: 10px;
     background-color: #373737;
@@ -183,7 +193,7 @@ svg {
 }
 
 .level-box .progress {
-    height: 65px;
+    height: 40px;
     background-color: #7fea7f;
 }
 
@@ -200,7 +210,7 @@ svg {
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     font-size: 17px;
     font-family: "SourceCodePro-Semibold";
-    line-height: 65px;
+    line-height: 40px;
     margin-left: 10px;
 }
 
@@ -272,6 +282,10 @@ svg {
     opacity: 0.5;
 }
 
+.purchase-button.selected {
+    border: 1px solid #7fea7f;
+}
+
 
 .hex-list {
     width: 300px;
@@ -304,7 +318,7 @@ div.grid-container {
 }
 
 
-.purchase-button .color-box {
+.color-box {
     width: 65px;
     height: 65px;
     float: left;
@@ -335,8 +349,8 @@ div.grid-container {
 .purchase-button .stat {
     margin-left: 14px;
     margin-right: 6px;
-    width: 120px;
-    font-size: 19px;
+    width: 195px;
+    font-size: 17px;
     float: left;
 }
 
@@ -359,31 +373,12 @@ div.grid-container {
 }
 
 .slot .affected {
-    color: #7fea7f;
+    color: #FFFFFF;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
-.sell-button {
-    float: left;
-    height: 28px;
-    width: 276px;
-    margin-left: 10px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    text-align: center;
-    font-family: "SourceCodePro-Semibold";
-    line-height: 28px;
-    background-color: red;
-    border: 2px solid #000000;
-}
-
-.sell-button:hover {
-    opacity: 0.9;
-    border: 2px solid red;
-}
-
-.sell-button.sell-inactive {
-    opacity: 0.6;
+.slot .cooldown {
+    opacity: 0.8;
 }
 
 .farm-button {
@@ -441,25 +436,105 @@ div.grid-container {
     color: #FF0000;
 }
 
-.social {
-    margin-top: 10px;
+.selection-container {
+    width: 260px;
+    height: 90px;
+    float: left;
+    background-color: #373737;
+    margin-left: 10px;
+    padding: 10px;
 }
 
-.bitcoin {
-    cursor: pointer;
-    float: left;
-    color: white;
+.selection-title {
+    color: #FFFFFF;
     font-family: "SourceCodePro-Semibold";
-    font-size: 16px;
+    font-size: 17px;
+    width: 150px;
+    float: left;
+}
+
+.selection-box {
+    width: 280px;
+    height: 100px;
+    float: left;
+    margin-top: 5px;
+}
+
+.selection-label {
     margin-left: 5px;
-}
-
-.bitcoin div {
     float: left;
+    width: 150px;
 }
 
-.bitcoin img {
-    width: 20px;
+.sell-button {
+    font-family: "SourceCodePro-Semibold";
+    float: right;
+    margin-top: -25px;
+    margin-right: 20px;
+    width: 100px;
     height: 20px;
+    text-align: center;
+    line-height: 20px;
+    background-color: #5b0000;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.sell-button:hover {
+    background-color: #830000;
+}
+
+.grid-list {
+    width: 260px;
     float: left;
+    background-color: #373737;
+    margin-left: 10px;
+    padding: 5px 10px 10px 10px;
+    margin-top: 5px;
+    color: #FFFFFF;
+    font-family: "SourceCodePro-Semibold";
+}
+
+.grid-button {
+    float: left;
+    width: 260px;
+    height: 60px;
+    background-color: #4d4d4d;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.grid-button.selected {
+    background-color: #6a6a6a;
+}
+
+.grid-button:hover {
+    background-color: #6a6a6a;
+}
+
+.toggle-buttons {
+    margin-left: 5px;
+    height: 35px;
+    float: left;
+}
+
+.toggle-button {
+    margin-left: 5px;
+    width: 138px;
+    height: 30px;
+    float: left;
+    background-color: #373737;
+    color: #FFFFFF;
+    cursor: pointer;
+    text-align: center;
+    line-height: 30px;
+    font-family: "SourceCodePro-Semibold";
+}
+
+.toggle-button.selected {
+    background-color: #4d4d4d;
+}
+
+.toggle-button:hover {
+    opacity: 0.9;
 }
