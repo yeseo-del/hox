@@ -88,6 +88,13 @@ angular.module('HexaClicker', [])
             }
         }
 
+        $scope.upgradeSlot = function(slot) {
+            if($scope.Status.credit >= slot.hexaEntity.calcUpgrade()) {
+                $scope.Status.credit -= slot.hexaEntity.calcUpgrade();
+                slot.hexaEntity.upgrade();
+            }
+        }
+
         $scope.clearHighlight = function() {
             $scope.highlighted = [];
         }

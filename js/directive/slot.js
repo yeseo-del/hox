@@ -14,6 +14,8 @@ angular.module('HexaClicker')
                 scope.select = function(event) {
                     if(event.ctrlKey) {
                         scope.activateSlot(scope.slot);
+                    } else if(event.shiftKey) {
+                        scope.upgradeSlot(scope.slot);
                     } else {
                         scope.selectSlot(scope.slot);
                     }
