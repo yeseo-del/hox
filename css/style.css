@@ -561,3 +561,9 @@ div.grid-container {
     height: 20px;
     float: left;
 }
+
+.reddit a{
+    color: white;
+    font-family: "SourceCodePro-Semibold";
+    margin-left: 10px;
+}
