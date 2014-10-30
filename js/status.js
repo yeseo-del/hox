@@ -6,7 +6,7 @@ angular.module('HexaClicker')
         function Status() {
             this.allCredit = 0;
             this.credit = 0;
-            this.utility = 1;
+            this.utility = 0;
             this.tier = 1;
 
             this.achievedHexas = [0, 25, 26, 27];

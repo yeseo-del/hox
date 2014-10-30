@@ -162,10 +162,12 @@ angular.module('HexaClicker')
                 return this.getSlot(this.positionMap[position.q][position.r]);
             }
 
-            this.emptySlotCount = function() {
-                return this.slots.filter(function(slot){
-                    return slot.hexaEntity == undefined;
+            this.emptySlotCount = function(tier) {
+                var empty = this.slots.filter(function(slot){
+                    return slot.hexaEntity == undefined && slot.tier <= tier;
                 }).length;
+                //exclude clicker
+                return empty - 1;
             }
 
             this.getAffectedSlots = function(slot) {

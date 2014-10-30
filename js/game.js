@@ -97,7 +97,7 @@ angular.module('HexaClicker', [])
         $scope.selectedPurchaseList = 1;
 
         $scope.click = function() {
-            $scope.Progress.currentLevel.dealDamage(50 + $scope.Grid.getGrid().getDPS() * 0.1);
+            $scope.Progress.currentLevel.dealDamage(5 + $scope.Grid.getGrid().getDPS() * 0.1);
         }
 
         $scope.toggleProgress = function() {
@@ -105,7 +105,7 @@ angular.module('HexaClicker', [])
         }
 
         $scope.canContinuePurchase = function() {
-            if($scope.Grid.getGrid().emptySlotCount() == 0
+            if($scope.Grid.getGrid().emptySlotCount($scope.Status.tier) == 0
                 || ($scope.selectedHexaForPurchase.type == Hexa.TYPE.DPS && $scope.Status.credit < $scope.selectedHexaForPurchase.price)
                 || ($scope.selectedHexaForPurchase.type == Hexa.TYPE.UTILITY && $scope.Status.utility < 1)) {
                 $scope.selectedHexaForPurchase = undefined;
@@ -122,10 +122,18 @@ angular.module('HexaClicker', [])
             });
         }
 
+        $scope.checkUtility = function() {
+            if($scope.Progress.maxLevel == $scope.Progress.currentLevel.level
+                && $scope.Progress.currentLevel.level % 10 == 0) {
+                $scope.Status.utility += $scope.Grid.grids.length;
+            }
+        }
+
         $scope.$on('kill', function(event) {
             console.log('onKill');
             $scope.Status.addCredit($scope.Progress.currentLevel.credit);
             $scope.checkAchievedHexas();
+            $scope.checkUtility();
         });
 
         $scope.$on('purchase', function(event, hexa) {
@@ -186,6 +194,7 @@ angular.module('HexaClicker', [])
             saveObj.kills = $scope.Progress.currentLevel.kills;
             saveObj.currentHp = $scope.Progress.currentLevel.currentHp;
             saveObj.progressMode = $scope.Progress.progressMode;
+            saveObj.achievedHexas = $scope.Status.achievedHexas;
             if($scope.Progress.currentLevel.bossTimer) {
                 saveObj.bossTimer = $scope.Progress.currentLevel.bossTimer.time;
             }
@@ -222,9 +231,12 @@ angular.module('HexaClicker', [])
         }
 
         $scope.loadGame = function(){
-            var saveObj = JSON.parse(window.localStorage.getItem("hexaclickersave"));
             var saveVersion = window.localStorage.getItem("hexaclickersaveversion");
 
+            //REWARD
+            $scope.rewardOldPlayers(saveVersion);
+
+            var saveObj = JSON.parse(window.localStorage.getItem("hexaclickersave"));
             if(saveObj != undefined && saveVersion != undefined && saveVersion >= $scope.SAVE_VERSION) {
                 console.log("LOAD: ", saveObj);
 
@@ -235,6 +247,7 @@ angular.module('HexaClicker', [])
                 $scope.Progress.currentLevel.kills = saveObj.kills;
                 $scope.Progress.currentLevel.currentHp = saveObj.currentHp;
                 $scope.Progress.progressMode = saveObj.progressMode;
+                $scope.Status.achievedHexas = saveObj.achievedHexas;
                 if(saveObj.bossTimer) {
                     $scope.Progress.currentLevel.startBossTimer(saveObj.bossTimer);
                 }
@@ -304,9 +317,11 @@ angular.module('HexaClicker', [])
         }
 
         $scope.createGrid = function() {
-            if($scope.Progress.currentLevel.level > 10) {
-                $scope.softReset();
-                $scope.Grid.createGrid();
+            if($scope.Progress.currentLevel.level > 80) {
+                if(confirm("Are you sure? Your hexas and credit will disappear.")) {
+                    $scope.softReset();
+                    $scope.Grid.createGrid();
+                }
             }
         }
 
@@ -333,6 +348,13 @@ angular.module('HexaClicker', [])
                     slot.effects = [];
                 });
             });
+        }
+
+        $scope.rewardOldPlayers = function(saveVersion) {
+            if(saveVersion < 3) {
+                alert('Unfortunately your save version is incompatible with the new version of the game. You\'ve got a free grid as a reward for testing. Thank you :)');
+                $scope.Grid.createGrid();
+            }
         }
 
         $scope.loadGame();

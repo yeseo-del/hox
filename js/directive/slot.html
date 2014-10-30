@@ -23,7 +23,10 @@
 
         <div class="label" ng-if="slot.hexaEntity.hexa.type == 2" ng-class="{ affected: slot.effects.length > 0 }">
            <div ng-if="slot.hexaEntity.duration > 0">{{ slot.hexaEntity.duration }}</div>
-           <div ng-if="slot.hexaEntity.duration == 0">U</div>
+           <div ng-if="slot.hexaEntity.duration == 0">
+               <span ng-if="slot.hexaEntity.hexa.active">A</span>
+               <span ng-if="!slot.hexaEntity.hexa.active">P</span>
+           </div>
         </div>
     </div>
 

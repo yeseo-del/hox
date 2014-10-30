@@ -118,15 +118,24 @@
 
         <div class="grid-list">
             <div class="grid-button" ng-repeat="grid in Grid.grids" ng-click="Grid.setGrid($index)" ng-class="{ selected: Grid.currentGrid == $index}">
-                Grid: #{{ $index + 1 }} - DPS: {{ grid.getDPS(true) }}
+                Grid: #{{ $index + 1 }} - DPS: {{ grid.getDPS(true) | prettify }}
             </div>
             <div class="grid-button" ng-click="createGrid()">
-                Create New Grid
+                Create New Grid - Required level: 80
             </div>
             <div style="clear: both"></div>
         </div>
 
         <div class="help-box">
+            <ul>
+                <li>Click on the + hexa to deal dmg.</li>
+                <li>Select the hexa you want to buy on the left, then select the slot where you want to place it.</li>
+                <li>Select the slot on the grid to upgrade/activate the hexa.</li>
+                <li>Press CTRL + Left-click to activate the utility hexa</li>
+                <li>Every utility hexa costs 1 point. You receive utility points every 10 levels</li>
+                <li>You can unlock more slots by reaching lvl 30 and lvl 60.</li>
+                <li>You enable automatic level change by selecting Progress mode and disable it by selecting Farm mode.</li>
+            </ul>
             <button ng-click="resetGame()">Hard reset</button>
         </div>
     </div>
