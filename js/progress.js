@@ -31,6 +31,10 @@ angular.module('HexaClicker')
                 console.log("Change Level: ", newLevel);
 
                 if(newLevel > 0 && newLevel <= this.maxLevel) {
+                    if(this.currentLevel.bossTimer) {
+                        this.currentLevel.bossTimer.cancel();
+                        this.currentLevel.bossTimer = undefined;
+                    }
                     this.setLevel(this.currentLevel.level + direction);
                     $rootScope.$broadcast('changelevel', this.currentLevel.level);
                     console.log('MaxLevel: ', this.maxLevel, " NewLevel: ", newLevel);
