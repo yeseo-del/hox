@@ -5,8 +5,10 @@ angular.module('HexaClicker')
             templateUrl: 'js/directive/selection.html',
             link: function link(scope, element, attrs) {
                 scope.sell = function() {
-                    scope.sellSlot(scope.selectedSlot);
-                    scope.selectSlot(undefined);
+                    if(scope.selectedSlot.hexaEntity.cooldown == 0) {
+                        scope.sellSlot(scope.selectedSlot);
+                        scope.selectSlot(undefined);
+                    }
                 }
 
                 scope.nextDps = function() {

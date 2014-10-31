@@ -484,6 +484,10 @@ div.grid-container {
     background-color: #830000;
 }
 
+.sell-button.inactive-sell {
+    background-color: #8c8c8c;
+}
+
 .grid-list {
     width: 260px;
     float: left;

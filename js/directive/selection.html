@@ -1,5 +1,5 @@
 <div class="selection-box" ng-if="selectedSlot.hexaEntity" style="color: white">
-    <div class="sell-button" ng-click="sell()">Sell {{ selectedSlot.hexaEntity.sellPrice() | prettify }}</div>
+    <div class="sell-button" ng-click="sell()" ng-class="{ 'inactive-sell': selectedSlot.hexaEntity.cooldown > 0 }">Sell {{ selectedSlot.hexaEntity.sellPrice() | prettify }}</div>
     <!-- DPS -->
     <div ng-if="selectedSlot.hexaEntity.hexa.type == 1">
         <div class="color-box" ng-style="{'background-color': selectedSlot.hexaEntity.hexa.color}">
