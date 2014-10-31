@@ -23,6 +23,19 @@ angular.module('HexaClicker', [])
             $scope.selectedSlot = slot;
         }
 
+        var pushEffect = function(slot, affectingSlot) {
+            var alreadyAffecting = false;
+            slot.effects.forEach(function(as) {
+                if(as.id == affectingSlot.id) {
+                    alreadyAffecting = true;
+                }
+            });
+
+            if(!alreadyAffecting) {
+                slot.effects.push(affectingSlot);
+            }
+        }
+
         $scope.buyHexa = function(slot) {
             if($scope.selectedHexaForPurchase.type == Hexa.TYPE.DPS) {
                 if($scope.selectedHexaForPurchase.price <= $scope.Status.credit) {
@@ -39,7 +52,7 @@ angular.module('HexaClicker', [])
                     //Activate passive effect
                     if($scope.selectedHexaForPurchase.type == 2 && !$scope.selectedHexaForPurchase.active) {
                         $scope.Grid.getGrid().getAffectedSlots(slot).forEach(function(affectedSlot) {
-                            affectedSlot.effects.push(slot);
+                            pushEffect(affectedSlot, slot);
                         });
                     }
 
@@ -60,8 +73,11 @@ angular.module('HexaClicker', [])
             slot.hexaEntity = undefined;
         }
 
-        var removeEffectOfSlot = function(slot) {
-            $scope.Grid.getGrid().getAffectedSlots(slot).forEach(function(affectedSlot) {
+        var removeEffectOfSlot = function(slot, grid) {
+            if(grid == null) {
+                grid = $scope.Grid.getGrid();
+            }
+            grid.getAffectedSlots(slot).forEach(function(affectedSlot) {
                 console.log("affectedSlot: ", affectedSlot);
                 affectedSlot.effects.splice(affectedSlot.effects.indexOf(slot.id), 1);
                 console.log("after: ",affectedSlot);
@@ -80,7 +96,7 @@ angular.module('HexaClicker', [])
                 affected.forEach(function(position) {
                     var slot = $scope.Grid.getGrid().getSlotByPos(position);
                     if(slot != undefined) {
-                        slot.effects.push(activatedSlot);
+                        pushEffect(slot, activatedSlot);
                     }
                 });
 
@@ -181,7 +197,7 @@ angular.module('HexaClicker', [])
                         if(slot.hexaEntity.duration > 0) {
                             slot.hexaEntity.duration--;
                             if(slot.hexaEntity.duration == 0) {
-                                removeEffectOfSlot(slot);
+                                removeEffectOfSlot(slot, grid);
                             }
                         }
                     }
@@ -278,7 +294,7 @@ angular.module('HexaClicker', [])
                         }
 
                         slotsave.effects.forEach(function(id) {
-                            slot.effects.push($scope.Grid.grids[gindex].slots[id]);
+                            pushEffect(slot, $scope.Grid.grids[gindex].slots[id]);
                         });
                     });
                 });
