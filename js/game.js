@@ -358,7 +358,8 @@ angular.module('HexaClicker', [])
         }
 
         $scope.rewardOldPlayers = function(saveVersion) {
-            if(saveVersion < 3) {
+            if(saveVersion && saveVersion < 3) {
+                console.log("Save version: ", saveVersion);
                 alert('Unfortunately your save version is incompatible with the new version of the game. You\'ve got a free grid as a reward for testing. Thank you :)');
                 $scope.Grid.createGrid();
             }
