@@ -1,5 +1,5 @@
 angular.module('HexaClicker', [])
-    .controller('GameCtrl', ['$scope', '$interval', 'Progress', 'Grid', 'Data', 'Status', function($scope, $interval, Progress, Grid, Data, Status) {
+    .controller('GameCtrl', ['$scope', '$interval', '$window', 'Progress', 'Grid', 'Data', 'Status', function($scope, $interval, $window, Progress, Grid, Data, Status) {
 
         $scope.alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
 
@@ -379,6 +379,18 @@ angular.module('HexaClicker', [])
                 alert('Unfortunately your save version is incompatible with the new version of the game. You\'ve got a free grid as a reward for testing. Thank you :)');
                 $scope.Grid.createGrid();
             }
+        }
+
+        $scope.exportSave = function() {
+            var exportString = window.localStorage.getItem("hexaclickersave");
+            window.prompt('Save string', Base64.encode(exportString));
+        }
+
+        $scope.importSave = function() {
+            var importString = $window.prompt('Save string');
+            var importDecoded = Base64.decode(importString);
+            window.localStorage.setItem("hexaclickersave", importDecoded);
+            window.location.reload();
         }
 
         $scope.loadGame();
