@@ -12,11 +12,11 @@
 <div class="container" ng-app="HexaClicker" ng-controller="GameCtrl">
     <div class="hex-list">
         <div class="credit-box">
-            <div style="width: 190px; float: left; margin-right: 20px">
+            <div style="width: 190px; float: left; margin-right: 10px">
                 <span class="credit-label"><i class="fa fa-dollar"></i> </span><span class="credit-amount">{{ Status.credit | prettify }} |</span>
             </div>
-            <div style="width: 50px; float: left">
-                <span class="credit-label"><i class="fa fa-bolt"></i> </span><span class="credit-amount">{{ Status.utility }}</span>
+            <div style="float: left">
+                <span class="credit-label"><i class="fa fa-bolt"></i> </span><span style="margin-left: 5px;" class="credit-amount">{{ Status.utility }}</span>
             </div>
         </div>
         <div class="toggle-buttons">
