@@ -78,9 +78,11 @@ angular.module('HexaClicker', [])
                 grid = $scope.Grid.getGrid();
             }
             grid.getAffectedSlots(slot).forEach(function(affectedSlot) {
-                console.log("affectedSlot: ", affectedSlot);
-                affectedSlot.effects.splice(affectedSlot.effects.indexOf(slot.id), 1);
-                console.log("after: ",affectedSlot);
+                affectedSlot.effects.forEach(function(affectingSlot, index){
+                    if(affectingSlot.id == slot.id) {
+                        affectedSlot.effects.splice(index, 1);
+                    }
+                });
             });
         }
 
