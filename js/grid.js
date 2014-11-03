@@ -111,7 +111,9 @@ angular.module('HexaClicker')
 
                 if(withEffects) {
                     this.effects.forEach(function(affectingSlot) {
-                        sum *= affectingSlot.hexaEntity.hexa.effect.DPS;
+                        if(affectingSlot.hexaEntity && affectingSlot.hexaEntity.hexa.effect) {
+                            sum *= affectingSlot.hexaEntity.hexa.effect.DPS;
+                        }
                     });
                 }
 
