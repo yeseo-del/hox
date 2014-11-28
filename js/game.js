@@ -140,7 +140,7 @@ angular.module('HexaClicker', [])
         $scope.checkAchievedHexas = function() {
             var hexas = $scope.Data.getHexas(Hexa.TYPE.DPS);
             hexas.forEach(function(hexa, index) {
-                if(hexa.price <= $scope.Status.credit && $scope.Status.achievedHexas.indexOf(hexas[index + 1].id) == -1) {
+                if(index + 1 != hexas.length && hexa.price <= $scope.Status.credit && $scope.Status.achievedHexas.indexOf(hexas[index + 1].id) == -1) {
                     console.log("Achieved hexa: ", hexa.id);
                     $scope.Status.achievedHexas.push(hexas[index + 1].id);
                 }
