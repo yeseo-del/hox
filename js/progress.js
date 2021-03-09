@@ -65,7 +65,7 @@ angular.module('HexaClicker')
                         me.changeLevel(Level.DIRECTION.FORWARD);
                     } else {
                         if(me.currentLevel.boss) {
-                            me.currentLevel.startBossTimer(30);
+                            me.currentLevel.startBossTimer(60);
                         }
                     }
                 }
@@ -119,7 +119,7 @@ angular.module('HexaClicker')
             }
 
             if(this.boss) {
-                this.startBossTimer(30);
+                this.startBossTimer(60);
             }
 
             this.dealDamage = function(damage) {
