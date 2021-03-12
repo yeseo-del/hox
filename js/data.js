@@ -30,9 +30,12 @@ angular.module('HexaClicker')
             new DpsHexa(24, "#00AEEF",  2100e+24,    2100e+24,   74e+21),
 
             //UTILITY HEXAS
-            new ActiveUtilityHexa(25, "#586fa1", 1, 1000, "[Active] +50% DPS Horizontally", UtilityHexa.TARGET.HORIZONTAL, {DPS: 1.5}, 10, 30),
-            new ActiveUtilityHexa(26, "#ea8a00", 2, 1000, "[Active] +50% Area DPS", UtilityHexa.TARGET.AREA, {DPS: 1.5}, 10, 30),
-            new PassiveUtilityHexa(27, "#82CA9D", 2, 1000, "[Passive] +10% Area DPS", UtilityHexa.TARGET.AREA, {DPS: 1.10})
+            new ActiveUtilityHexa(25, "#586fa1", 1, 1000, "[Active] +50% DPS Horizontally", UtilityHexa.TARGEV.HORIZONTAL, {DPS: 1.5}, 10, 30),
+            new ActiveUtilityHexa(26, "#586fa1", 3, 1000, "[Active] +100% DPS Vertically", UtilityHexa.TARGET.vertically, {DPS: 1.5}, 20, 60),
+            new ActiveUtilityHexa(27, "#ea8a00", 1, 1000, "[Active] +50% Area DPS", UtilityHexa.TARGET.AREA, {DPS: 1.5}, 10, 30),
+            new ActiveUtilityHexa(27, "#ea8a00", 3, 1000, "[Active] +100% Area DPS", UtilityHexa.TARGET.AREA, {DPS: 1.5}, 20, 60),
+            new PassiveUtilityHexa(28, "#82CA9D", 1, 1000, "[Passive] +10% Area DPS", UtilityHexa.TARGET.AREA, {DPS: 1.10}),
+            new PassiveUtilityHexa(29, "#FFD700", 3, 1000, "[Passive] +100% Area DPS", UtilityHexa.TARGET.AREA, {DPS: 1.30})
         ];
 
         this.getHexa = function(id) {
